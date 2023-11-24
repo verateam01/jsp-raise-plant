@@ -28,15 +28,13 @@
 			<button id="loginButton" class="btn btn-primary"
 				style="width: 90px;">로그인</button>
 		</div>
-	<div class="d-flex flex-column">
+	<div class="d-flex flex-column align-middle">
 		<p>소셜로그인</p>
 		<span onclick="kakaoLogin();">
       <a href="javascript:void(0)">
 					<img class="kakaoButton" style="width:185px; hegiht:45px;" src="../../img/kakao_loginButton.png" alt="카카오로그인버튼"/>
       </a>
-	</span>
-		<p id="token-result"></p>
-		<button class="api-btn" onclick="requestUserInfo()" style="visibility:hidden">사용자 정보 가져오기</button>
+		</span>
 	</div>
 </div>
 <!--카카오로그인-->
@@ -81,25 +79,12 @@
           },
         })
       }
-    function kakaoLogout() {
-        if (Kakao.Auth.getAccessToken()) {
-          Kakao.API.request({
-            url: '/v1/user/unlink',
-            success: function (response) {
-            	console.log(response)
-            },
-            fail: function (error) {
-              console.log(error)
-            },
-          })
-          Kakao.Auth.setAccessToken(undefined)
-        }
-      } 
+     
     
   
 </script>
 
-
+<!-- 소셜로그인 -->
 <script>
 	$(document).ready(()=>{
 		$("#loginButton").click(()=>{

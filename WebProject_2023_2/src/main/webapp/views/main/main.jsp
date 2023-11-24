@@ -6,6 +6,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
+<!-- jQuery -->
+<script
+	src="${pageContext.request.contextPath}/resources/js/jquery.min.js">
+</script>
 </head>
 <body>
 	<%
@@ -17,17 +23,35 @@
 		} else if(kakao_user != null){
 		    id = kakao_user;
 		} else {
-		    // 둘 다 null인 경우
-		    response.sendRedirect("http://localhost:8080/WebProject_2023_2/views/login/login.jsp");
-		    return;
+		  response.sendRedirect("http://localhost:8080/WebProject_2023_2/views/login/login.jsp");
+		  return;
 		}
 	%>
 
-	<div>
-		로그인아이디 <%= id %><br/>
-		Main Page입니다
+	<div class="container mt-5">
+		<h3>환영합니다 <%= id %>님!</h3>
+		<button type="button" class="btn btn-outline-info">로그아웃</button>
 	</div>
 	
 	
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+	<%if (id == kakao_user)%>
+	<script>
+	function kakaoLogout() {
+        if (Kakao.Auth.getAccessToken()) {
+          Kakao.API.request({
+            url: '/v1/user/unlink',
+            success: function (response) {
+            	console.log(response)
+            },
+            fail: function (error) {
+              console.log(error)
+            },
+          })
+          Kakao.Auth.setAccessToken(undefined)
+        }
+      }
+	</script>
+	<%-- <%else if(id == user.getId()) %> --%>
 </body>
 </html>
