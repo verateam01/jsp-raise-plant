@@ -11,6 +11,11 @@
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery.min.js">
 </script>
+<style>
+	.kakaoButton{
+		cursor:pointer
+	}
+</style>
 </head>
 <body>
 <div class="container d-flex flex-column mt-4">
@@ -25,8 +30,76 @@
 		</div>
 	<div class="d-flex flex-column">
 		<p>소셜로그인</p>
+		<span onclick="kakaoLogin();">
+      <a href="javascript:void(0)">
+					<img class="kakaoButton" style="width:185px; hegiht:45px;" src="../../img/kakao_loginButton.png" alt="카카오로그인버튼"/>
+      </a>
+	</span>
+		<p id="token-result"></p>
+		<button class="api-btn" onclick="requestUserInfo()" style="visibility:hidden">사용자 정보 가져오기</button>
 	</div>
 </div>
+<!--카카오로그인-->
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script>
+  Kakao.init('baf124810d0cd543bcd9dba2e0cf58f6');
+  console.log(Kakao.isInitialized());
+</script>
+<script>
+    function kakaoLogin() {
+        Kakao.Auth.login({
+          success: function (response) {
+            Kakao.API.request({
+              url: '/v2/user/me',
+              
+              success: function (response) {
+            	  console.log(response)
+            	  
+            	  $.ajax({
+            		  url:"${pageContext.request.contextPath}/api/login/kakao",
+            		  method:"POST",
+            		  data:{
+            			  id:response.id,
+            				email:response.kakao_account.email,
+            				name:response.properties.nickname
+            		  },
+            		  success:(res)=>{
+            			  if(res.status == "success"){
+	            			  window.location.href="${pageContext.request.contextPath}/views/main/main.jsp";	  
+            			  } 
+            		  }
+            	  }) 
+              },
+              
+              fail: function (error) {
+                console.log(error)
+              },
+            })
+          },
+          fail: function (error) {
+            console.log(error)
+          },
+        })
+      }
+    function kakaoLogout() {
+        if (Kakao.Auth.getAccessToken()) {
+          Kakao.API.request({
+            url: '/v1/user/unlink',
+            success: function (response) {
+            	console.log(response)
+            },
+            fail: function (error) {
+              console.log(error)
+            },
+          })
+          Kakao.Auth.setAccessToken(undefined)
+        }
+      } 
+    
+  
+</script>
+
+
 <script>
 	$(document).ready(()=>{
 		$("#loginButton").click(()=>{
@@ -53,6 +126,10 @@
 				alert("빈칸이 존재합니다.");
 			}
 		})
+		
+		//카카오로그인버튼 로직
+		
+		
 	})
 </script>
 </body>
