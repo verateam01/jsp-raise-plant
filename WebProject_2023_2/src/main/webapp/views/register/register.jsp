@@ -30,7 +30,7 @@
 		</p>
 		<input type="text" class="form-control" placeholder="아이디" name="id" />
 		<p class="m-0 p-2">비밀번호</p>
-		<input type="text" class="form-control" placeholder="비밀번호" name="pw" />
+		<input type="password" class="form-control" placeholder="비밀번호" name="pw" />
 		<div class="d-flex justify-content-end mt-3">
 			<button id="registerButton" class="btn btn-primary"
 				style="width: 90px;">회원가입</button>
@@ -53,7 +53,7 @@
 
         let checkDuplicateId=(id)=>{
           $.ajax({
-              url: "${pageContext.request.contextPath}/api/duplicate",
+              url: "/api/duplicate",
               type: "POST",
               data: { id: id },
               success: (response) => {
@@ -85,7 +85,7 @@
 					
 					if(idValid == true && id!=""&& nick!="" && name!="" && pw!=""){
 						$.ajax({
-							url: "${pageContext.request.contextPath}/api/register",
+							url: "/api/register",
 							type: "POST",
 							data: {
 								name:name,
@@ -94,14 +94,11 @@
 								pw:pw
 							},
 							success:(response)=>{
-									window.location.href="${pageContext.request.contextPath}/views/login/login.jsp"
+									window.location.href="/login"
 							}
 						});
 					}
-					
 				})
-			
-			
 		})
 	</script>
 </body>

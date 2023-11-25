@@ -54,7 +54,7 @@
             	  console.log(response)
             	  
             	  $.ajax({
-            		  url:"${pageContext.request.contextPath}/api/login/kakao",
+            		  url:"/api/login/kakao",
             		  method:"POST",
             		  data:{
             			  id:response.id,
@@ -63,7 +63,7 @@
             		  },
             		  success:(res)=>{
             			  if(res.status == "success"){
-	            			  window.location.href="${pageContext.request.contextPath}/views/main/main.jsp";	  
+	            			  window.location.href="/main";	  
             			  } 
             		  }
             	  }) 
@@ -93,7 +93,7 @@
 			
 			if(id!="" && pw != ""){
 				$.ajax({
-					url:"${pageContext.request.contextPath}/api/login",
+					url:"/api/login",
 					method:"POST",
 					data:{
 						id:id,
@@ -101,7 +101,7 @@
 					},
 					success:(response)=>{
 						if(response.status == "success")
-							window.location.href="${pageContext.request.contextPath}/views/main/main.jsp";
+							window.location.href="/main";
 						else
 							alert("아이디 비밀번호를 확인해주세요");
 					}
