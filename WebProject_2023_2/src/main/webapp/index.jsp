@@ -20,8 +20,15 @@
             </div>
             <div id="mid_content">
                 <div id="day_info">
-                    <p style="font-size: 40px;">4 Day</p>
-                    <button id="next_day_button">다음날</button>
+                <div id="day_left">
+                </div>
+                <div id="day_text">
+                	<p style="text-align: center; font-size: 40px;">4 Day</p>
+                </div>
+                <div id="day_skip_button">
+                	<button id="next_day_button">다음날</button>
+                </div>
+                   
                     
                 </div>
                 <div id="heart_content">
@@ -125,15 +132,20 @@
             height: 10%;
             /* 적절한 높이 설정 필요 */
         }
+        #day_left{
+        flex:1;
+        
+        }
+		#day_text{
+		flex:1;
+		}
+        #day_skip_button{
+        justify-content: center;
+        flex:1;
+        }
 
         #next_day_button {
-            position: absolute;
-            top: 50%;
-            /* 수직 중앙 정렬 */
-            right: 0;
-            /* 오른쪽 정렬 */
-            margin-right: 200px;
-            transform: translateY(-50%);
+           
             /* 버튼이 정확한 중앙에 위치하도록 조정 */
             font-size: 30px;
             font-family: 'omyu_pretty';
