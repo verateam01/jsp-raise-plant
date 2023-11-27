@@ -24,8 +24,14 @@
 		<div id="side_left"></div>
 		<div id="mid_content">
 			<div id="day_info">
-				<p style="font-size: 40px;">4 Day</p>
-				<button id="next_day_button">다음날</button>
+				<div id="day_left">
+                </div>
+                <div id="day_text">
+                	<p style="text-align: center; font-size: 40px;">4 Day</p>
+                </div>
+                <div id="day_skip_button">
+                	<button id="next_day_button">다음날</button>
+                </div>
 
 			</div>
 			<div id="heart_content">
