@@ -11,13 +11,11 @@
         body {
             font-family: 'omyu_pretty';
             font-size: larger;
-            height: 100%;
             /* 화면 전체 높이로 설정 */
             margin: 0;
             /* 기본 마진 제거 */
             padding: 0;
             /* 기본 패딩 제거 */
-            overflow: hidden;
         }
 
         #container {

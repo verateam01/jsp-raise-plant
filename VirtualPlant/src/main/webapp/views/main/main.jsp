@@ -6,6 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.5.0/kakao.min.js"></script>
+<script>Kakao.init('baf124810d0cd543bcd9dba2e0cf58f6');</script>
 <!-- main.css -->
 <!-- bootstrap -->
 <link rel="stylesheet"
@@ -38,14 +40,13 @@
 		<div id="mid_content">
 			<div id="day_info">
 				<div id="day_left">
-                </div>
-                <div id="day_text">
-                	<p style="text-align: center; font-size: 40px;">4 Day</p>
-                </div>
-                <div id="day_skip_button">
-                	<button id="next_day_button">다음날</button>
-                </div>
-
+	               </div>
+	               <div id="day_text">
+	            	   	<p style="text-align: center; font-size: 40px;">4 Day</p>
+	               </div>
+	               <div id="day_skip_button">
+	               		<button id="next_day_button">다음날</button>
+	               </div>
 			</div>
 			<div id="heart_content">
 				<div id="heart_gauge" style="margin: 0 auto;">
@@ -83,14 +84,11 @@
 
 				</div>
 			</div>
-
 		</div>
 
 		<div id="side_right">
 			<div id="side_right_box">
-
 				<div class="dropdown">
-
 					<button class="btn dropdown-toggle" type="button"
 						id="dropdownMenuButton1" data-bs-toggle="dropdown"
 						aria-expanded="false">
@@ -107,28 +105,23 @@
 			</div>
 		</div>
 	</div>
-	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-	<script>Kakao.init('baf124810d0cd543bcd9dba2e0cf58f6');</script>
+	
+	
 	<script>
 		function kakaoLogout() {
-       if (Kakao.Auth.getAccessToken()) {
-         Kakao.API.request({
-           url: '/v1/user/unlink',
-           success: (response)=>{
-           		window.location.href="/login"
-           },
-           fail:(error) => {
-             console.log(error)
-           },
-         })
-         Kakao.Auth.setAccessToken(undefined)
-       }
+       		if (Kakao.Auth.getAccessToken()) {
+         		Kakao.Auth.logout(function(){
+        	 	window.location.href="/login";
+        	 	console.log('로그아웃완료');
+         	})
+       	}
      }
 		function logout(){
-			let kakaoUser = "<%=kakaoUser%>";
+			let kakaoUser = "<%=kakaoUser%>"
 			console.log(kakaoUser);
-			if(kakaoUser != "null"){
+			if(Kakao.Auth.getAccessToken() != null){
 				kakaoLogout();
+				console.log('로직실행');
 			}
 			else{
 				$.ajax({
