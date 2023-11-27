@@ -20,14 +20,13 @@
 <body>
 <div class="container d-flex flex-column mt-4">
 	<h1 class="mb-4">로그인</h1>
-	<p>아이디</p>
+		<p>아이디</p>
 	<input type="text" class="form-control mb-4 p-3" placeholder="아이디" name="id"/>
-	<p>비밀번호</p>
+		<p>비밀번호</p>
 	<input type="password" class="form-control mb-4 p-3" placeholder="비밀번호" name="pw"/>
 	<div class="d-flex justify-content-end mt-3">
-			<button id="loginButton" class="btn btn-primary"
-				style="width: 90px;">로그인</button>
-		</div>
+		<button id="loginButton" class="btn btn-primary"style="width: 90px;">로그인</button>
+	</div>
 	<div class="d-flex flex-column align-middle">
 		<p>소셜로그인</p>
 		<span onclick="kakaoLogin();">
