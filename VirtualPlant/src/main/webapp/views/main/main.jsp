@@ -7,19 +7,32 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <!-- main.css -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/views/main/main.css">
 <!-- bootstrap -->
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/views/main/main.css">
+
 <!-- Font-awesome -->
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"></script>
+<link
+	rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
 
 </head>
 <body>
-<body>
+<%
+		User user = (User)session.getAttribute("user");
+		String kakaoUser = (String)session.getAttribute("kakao_user");
+		String id;
+		if(user != null){
+		    id = user.getId();
+		} else if(kakaoUser != null){
+		    id = kakaoUser;
+		} else {
+		  response.sendRedirect("/login");
+		  return;
+		}
+	%>
 	<div id="container">
 		<div id="side_left"></div>
 		<div id="mid_content">
@@ -81,7 +94,7 @@
 					<button class="btn dropdown-toggle" type="button"
 						id="dropdownMenuButton1" data-bs-toggle="dropdown"
 						aria-expanded="false">
-						<i id="user_icon" class="fa-solid fa-user"></i>이채원님
+						<i id="user_icon" class="fa-solid fa-user"></i><%=id %>님
 					</button>
 					<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 						<li><a class="dropdown-item" href="#">계정 설정</a></li>
@@ -94,21 +107,6 @@
 			</div>
 		</div>
 	</div>
-	<%-- <%
-		User user = (User)session.getAttribute("user");
-		String kakaoUser = (String)session.getAttribute("kakao_user");
-		String id;
-		if(user != null){
-		    id = user.getId();
-		} else if(kakaoUser != null){
-		    id = kakaoUser;
-		} else {
-		  response.sendRedirect("/login");
-		  return;
-		}
-	%> --%>
-
-	<%-- <h3>환영합니다 <%= id %>님!</h3> --%>
 	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 	<script>Kakao.init('baf124810d0cd543bcd9dba2e0cf58f6');</script>
 	<script>
@@ -127,7 +125,7 @@
        }
      }
 		function logout(){
-			<%-- let kakaoUser = "<%=kakaoUser%>" --%>
+			let kakaoUser = "<%=kakaoUser%>";
 			console.log(kakaoUser);
 			if(kakaoUser != "null"){
 				kakaoLogout();
@@ -150,5 +148,6 @@
 </script>
 	<!-- jQuery -->
 	<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
