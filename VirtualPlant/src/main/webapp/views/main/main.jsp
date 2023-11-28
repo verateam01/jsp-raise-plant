@@ -31,7 +31,7 @@
 		} else if(kakaoUser != null){
 		    id = kakaoUser;
 		} else {
-		  response.sendRedirect("/login");
+		  /* response.sendRedirect("/login"); */
 		  return;
 		}
 	%>
