@@ -11,18 +11,22 @@
         body {
             font-family: 'omyu_pretty';
             font-size: larger;
+            height: 100%;
             /* 화면 전체 높이로 설정 */
             margin: 0;
             /* 기본 마진 제거 */
             padding: 0;
             /* 기본 패딩 제거 */
         }
-
+img {
+	height: 80%;
+  object-fit: cover;
+}
         #container {
             display: flex;
             justify-content: center;
             align-items: stretch;
-            height: 100%;
+            height:100%;
             /* 화면 전체 높이로 설정 */
             width: 80%;
             margin: 0 auto;
@@ -67,7 +71,8 @@
 
         #action_area {
             width: 70%;
-            margin: 10% auto;
+            padding-top: 30px;
+            margin: 0 auto;
         }
 
         .buttons_container {
@@ -182,7 +187,7 @@
         }
 
         #plant {
-            margin-top: 50px;
+            padding-top: 0px;
             width: 60%;
             display: flex;
             justify-content: center;

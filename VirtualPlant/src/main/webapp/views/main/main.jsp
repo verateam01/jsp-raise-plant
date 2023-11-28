@@ -60,7 +60,7 @@
 					<i class="fa-solid fa-chevron-left fa-xl"></i>
 				</div>
 				<div id="plant">
-					<img src="img/plant.png" />
+					<img id="plant_img" src="img/plant.png" />
 				</div>
 				<div id="move_right_plant">
 					<i class="fa-solid fa-chevron-right  fa-xl"></i>
