@@ -18,7 +18,7 @@
 		<input type="text" id="chat" class="form-control" />
 		<button class="btn btn-primary" onclick="sendRequest()">전송</button>
 	</div>
-<<<<<<< HEAD
+
 
 <script>
     const sendRequest = () => {
@@ -40,40 +40,9 @@
         });
     }
 </script>
-
-
-
-	<script
-		src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/js/bootstrap.bundle.min.js"></script>
-=======
-	
-	<script>
-		const sendRequest=()=>{
-			let chatInput = $('#chat').val();
-			$('#loading').show();
-			$.ajax({
-				url:'/api/gpt',
-				type:'GET',
-				data:{'prompt':chatInput},
-				success:(response)=>{
-					console.log(response);
-					$('.write-gpt').html(response.answer);
-					$('#loading').hide();		
-				},
-				error:(error) => {
-                    console.log('Error:', error);
-                    $('#loading').hide();
-                }
-			})
-		}
-		
-	</script>
-	
 	
 	<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/bootstrap.bundle.min.js"></script>
->>>>>>> b7841f1 (debugging)
+
 </body>
 </html>
