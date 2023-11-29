@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>버츄얼플랜트</title>
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.5.0/kakao.min.js"></script>
 <script>Kakao.init('baf124810d0cd543bcd9dba2e0cf58f6');</script>
 <!-- main.css -->
@@ -36,8 +36,6 @@
 		}
 	%>
 	<div id="container">
-		<div id="side_left"></div>
-		<div id="mid_content">
 			<div id="day_info">
 				<div id="day_left">
 	               </div>
@@ -60,7 +58,7 @@
 					<i class="fa-solid fa-chevron-left fa-xl"></i>
 				</div>
 				<div id="plant">
-					<img id="plant_img" src="img/plant.png" />
+					<img id="plant_img" src="../../img/plant.png" />
 				</div>
 				<div id="move_right_plant">
 					<i class="fa-solid fa-chevron-right  fa-xl"></i>
@@ -86,9 +84,8 @@
 			</div>
 		</div>
 
-		<div id="side_right">
-			<div id="side_right_box">
-				<div class="dropdown">
+
+				<div id="user_menu" class="dropdown">
 					<button class="btn dropdown-toggle" type="button"
 						id="dropdownMenuButton1" data-bs-toggle="dropdown"
 						aria-expanded="false">
@@ -101,10 +98,6 @@
 						<li><a class="dropdown-item" href="#" onclick="logout()">로그아웃</a></li>
 					</ul>
 				</div>
-
-			</div>
-		</div>
-	</div>
 	
 	
 	<script>

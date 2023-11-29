@@ -1,197 +1,198 @@
 @charset "UTF-8";
 
-        @font-face {
-            font-family: 'omyu_pretty';
-            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2') format('woff2');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        html,
-        body {
-            font-family: 'omyu_pretty';
-            font-size: larger;
-            height: 100%;
-            /* 화면 전체 높이로 설정 */
-            margin: 0;
-            /* 기본 마진 제거 */
-            padding: 0;
-            /* 기본 패딩 제거 */
-        }
-img {
-	height: 80%;
-  object-fit: cover;
+@font-face {
+    font-family: 'omyu_pretty';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
 }
-        #container {
-            display: flex;
-            justify-content: center;
-            align-items: stretch;
-            height:100%;
-            /* 화면 전체 높이로 설정 */
-            width: 80%;
-            margin: 0 auto;
-            /* 상하 마진을 0으로 설정 */
-        }
 
-        #heart_content {
-            display: flex;
-            padding: 0px 100px;
-        }
+html,
+body {
+    font-family: 'omyu_pretty';
+    font-size: larger;
+    height: 100%;
+    /* 화면 전체 높이로 설정 */
+    margin: 0;
+    /* 기본 마진 제거 */
+    padding: 0;
+    /* 기본 패딩 제거 */
+}
 
-        #day_info {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 10%;
-            /* 적절한 높이 설정 필요 */
-        }
-        #day_left{
-        flex:1;
-        
-        }
-		#day_text{
-		flex:1;
-		}
-        #day_skip_button{
-        justify-content: center;
-        flex:1;
-        }
+img {
+    height: 80%;
+    object-fit: cover;
+}
 
-        #next_day_button {
-            
-            /* 버튼이 정확한 중앙에 위치하도록 조정 */
-            font-size: 30px;
-            font-family: 'omyu_pretty';
-            border: 2px solid gray;
-            border-radius: 20px;
-            padding: 10px 20px;
-            background-color: white;
-        }
+#container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
-        #action_area {
-            width: 70%;
-            padding-top: 30px;
-            margin: 0 auto;
-        }
+    align-items: stretch;
+    height: 100%;
+    /* 화면 전체 높이로 설정 */
+    width: 1024px;
+    margin: 0 auto;
+    /* 상하 마진을 0으로 설정 */
+}
 
-        .buttons_container {
-            display: flex;
-            justify-content: center;
-            /* 버튼을 가운데 정렬 */
-        }
+#day_info {
+    flex: 2;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10%;
+    /* 적절한 높이 설정 필요 */
+}
 
-        .input_container {
-            width: 100%;
-            /* input의 너비를 컨테이너의 100%로 설정 */
-            margin-top: 10px;
-            /* 버튼과 input 사이의 간격 */
-        }
+#day_left {
+    flex: 1;
 
-        .action_button {
-            margin: 0 auto;
-            flex: 1;
-            /* 모든 버튼에 동일한 크기 할당 */
-            font-size: 30px;
-            font-family: 'omyu_pretty';
-            border: 2px solid gray;
-            border-radius: 20px;
-            padding: 10px 20px;
-            margin: 0 5px;
-            /* 버튼 사이 간격 */
-            background-color: white;
-        }
+}
 
-        #action_input {
-            font-family: 'omyu_pretty';
-            width: 100%;
-            height: 30px;
-            font-size: 25px;
-            padding: 10px 20px;
-        }
+#day_text {
+    flex: 1;
+}
 
-        #side_left,
-        #mid_content,
-        #side_right {
-            margin: 5px;
-            height: calc(100% - 10px);
-            /* 상하 마진 고려하여 높이 조정 */
-        }
+#day_skip_button {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+}
 
-        #side_left {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            /* 버튼들을 맨 아래로 위치시킴 */
-        }
+#next_day_button {
 
-        #mid_content {
-            flex: 5;
-        }
+    /* 버튼이 정확한 중앙에 위치하도록 조정 */
+    font-size: 25px;
+    font-family: 'omyu_pretty';
+    border: 2px solid gray;
+    border-radius: 20px;
+    padding: 10px 20px;
+    background-color: white;
+}
 
-        #side_right {
-            flex: 1;
-        }
+#heart_content {
+    display: flex;
+    padding: 0px 150px;
+    flex: 1;
+}
 
-        #side_right_box {
-            margin: 5px;
-        }
+/* 하트 게이지 스타일링 */
+#heart_gauge {
+    width: 90%;
+    /* 전체 게이지 바의 폭 */
+    background-color: #ffffff;
+    /* 게이지 바의 배경색 */
+    border-radius: 10px;
+    /* 둥근 모서리 */
+    overflow: hidden;
+    /* 내부 내용이 바깥으로 넘치지 않도록 함 */
+    border: 1px solid grey;
+    padding: 5px;
+}
 
-        #user_icon {
-            margin-right: 10px;
-        }
+#gauge-fill {
+    height: 100%;
+    /* 게이지 높이 */
+    background-color: #f97178;
+    /* 채워진 게이지의 색상 */
+    border-radius: 10px;
+    /* 둥근 모서리 */
+    transition: width 0.5s ease-in-out;
+    /* 부드러운 전환 효과 */
 
-        #down_icon {
-            margin-left: 10px;
-        }
+}
 
-        /* 하트 게이지 스타일링 */
-        #heart_gauge {
-            width: 80%;
-            /* 전체 게이지 바의 폭 */
-            background-color: #ffffff;
-            /* 게이지 바의 배경색 */
-            border-radius: 10px;
-            /* 둥근 모서리 */
-            overflow: hidden;
-            /* 내부 내용이 바깥으로 넘치지 않도록 함 */
-            border: 1px solid grey;
-            padding: 5px;
-        }
+#action_area {
+    width: 70%;
+    padding-top: 30px;
+    margin: 0 auto;
+    flex: 3;
+}
 
-        #gauge-fill {
-            height: 40px;
-            /* 게이지 높이 */
-            background-color: #f97178;
-            /* 채워진 게이지의 색상 */
-            border-radius: 10px;
-            /* 둥근 모서리 */
-            transition: width 0.5s ease-in-out;
-            /* 부드러운 전환 효과 */
+.buttons_container {
+    display: flex;
+    justify-content: center;
+    /* 버튼을 가운데 정렬 */
+}
 
-        }
+.input_container {
+    width: 100%;
+    /* input의 너비를 컨테이너의 100%로 설정 */
+    margin-top: 10px;
+    /* 버튼과 input 사이의 간격 */
+}
 
-        #plant_area {
-            display: flex;
-        }
+.action_button {
+    margin: 0 auto;
+    flex: 1;
+    /* 모든 버튼에 동일한 크기 할당 */
+    font-size: 30px;
+    font-family: 'omyu_pretty';
+    border: 2px solid gray;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin: 0 5px;
+    /* 버튼 사이 간격 */
+    background-color: white;
+}
 
-        #move_left_plant,
-        #move_right_plant {
-            width: 20%;
-            display: flex;
-            justify-content: center;
-            /* 아이콘을 div의 중앙에 정렬 */
-            align-items: center;
-            /* 아이콘을 수직 중앙에 정렬 */
-        }
+#action_input {
+    font-family: 'omyu_pretty';
+    width: 100%;
+    height: 30px;
+    font-size: 25px;
+    padding: 10px 20px;
+}
 
-        #plant {
-            padding-top: 0px;
-            width: 60%;
-            display: flex;
-            justify-content: center;
-            /* 이미지를 div의 중앙에 정렬 */
-            align-items: center;
-            /* 이미지를 수직 중앙에 정렬 */
-        }
+
+#side_right_box {
+    margin: 5px;
+}
+
+#user_icon {
+    margin-right: 10px;
+}
+
+#down_icon {
+    margin-left: 10px;
+}
+
+
+
+#plant_area {
+    display: flex;
+    flex-direction: row;
+    flex: 10;
+}
+
+#move_left_plant,
+#move_right_plant {
+    flex: 1;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    /* 아이콘을 div의 중앙에 정렬 */
+    align-items: center;
+    /* 아이콘을 수직 중앙에 정렬 */
+}
+
+#plant {
+    flex: 5;
+    padding-top: 0px;
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    /* 이미지를 div의 중앙에 정렬 */
+    align-items: center;
+    /* 이미지를 수직 중앙에 정렬 */
+}
+
+#user_menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 30px;
+}
