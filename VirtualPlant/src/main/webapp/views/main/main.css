@@ -115,7 +115,7 @@ img {
 .buttons_container {
     display: flex;
     justify-content: center;
-    /* 버튼을 가운데 정렬 */
+
 }
 
 .input_container {
@@ -166,28 +166,8 @@ img {
     display: flex;
     flex-direction: row;
     flex: 10;
-}
-
-#move_left_plant,
-#move_right_plant {
-    flex: 1;
-    width: 20%;
-    display: flex;
-    justify-content: center;
-    /* 아이콘을 div의 중앙에 정렬 */
-    align-items: center;
-    /* 아이콘을 수직 중앙에 정렬 */
-}
-
-#plant {
-    flex: 5;
-    padding-top: 0px;
-    width: 60%;
-    display: flex;
-    justify-content: center;
-    /* 이미지를 div의 중앙에 정렬 */
-    align-items: center;
-    /* 이미지를 수직 중앙에 정렬 */
+    width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+    height: 100%; /* 부모 요소의 높이를 100%로 설정 */
 }
 
 #user_menu {
@@ -195,4 +175,35 @@ img {
     top: 0;
     right: 0;
     margin: 30px;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: none; /* 기존의 화살표 이미지 제거 */
+}
+
+
+.carousel-control-next-icon::after {
+  content: '>'; /* 원하는 문자 또는 아이콘 (예: 화살표) */
+  font-size: 24px; /* 크기 조절 */
+  color: black; /* 색상 변경 */
+}
+
+.carousel-control-prev-icon::after {
+  content: '<'; /* 원하는 문자 또는 아이콘 (예: 화살표) */
+  font-size: 24px; /* 크기 조절 */
+  color: black; /* 색상 변경 */
+}
+
+.carousel-item img {
+    width: auto; 
+    height: 100%; 
+    object-fit: cover; /* 이미지가 비율을 유지하며 컨테이너를 채우도록 함 */
+    margin: 0 auto;
+}
+.carousel-inner{
+	justify-content: center;
+}
+#carouselExampleIndicators {
+    width: 100%; /* 너비를 100%로 설정 */
+    height: 100%; /* 높이를 100%로 설정 */
 }

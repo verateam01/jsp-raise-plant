@@ -26,8 +26,10 @@
 		User user = (User)session.getAttribute("user");
 		String kakaoUser = (String)session.getAttribute("kakao_user");
 		String id;
+		String nick = "";
 		if(user != null){
 		    id = user.getId();
+			nick = user.getNick();
 		} else if(kakaoUser != null){
 		    id = kakaoUser;
 		} else {
@@ -54,15 +56,32 @@
 					style="color: #ff7575; margin: auto;"></i>
 			</div>
 			<div id="plant_area">
-				<div id="move_left_plant">
-					<i class="fa-solid fa-chevron-left fa-xl"></i>
-				</div>
-				<div id="plant">
-					<img id="plant_img" src="../../img/plant.png" />
-				</div>
-				<div id="move_right_plant">
-					<i class="fa-solid fa-chevron-right  fa-xl"></i>
-				</div>
+				<div id="carouselExampleIndicators" class="carousel slide" data-bs-interval="false">
+					<div class="carousel-indicators">
+					  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+					  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+					  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+					</div>
+					<div class="carousel-inner">
+					  <div class="carousel-item active">
+						<img src="../../img/plant_img/Gardenia1.jpg" class="d-block" alt="...">
+					  </div>
+					  <div class="carousel-item">
+						<img src="../../img/plant_img/Hyacinth1.jpg" class="d-block" alt="...">
+					  </div>
+					  <div class="carousel-item">
+						<img src="../../img/plant_img/Cactus1.jpg" class="d-block" alt="...">
+					  </div>
+					</div>
+					<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+					  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					  <span class="visually-hidden">Previous</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+					  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+					  <span class="visually-hidden">Next</span>
+					</button>
+				  </div>
 			</div>
 			<div id="action_area">
 				<div class="buttons_container">
@@ -89,7 +108,8 @@
 					<button class="btn dropdown-toggle" type="button"
 						id="dropdownMenuButton1" data-bs-toggle="dropdown"
 						aria-expanded="false">
-						<i id="user_icon" class="fa-solid fa-user"></i><%=id %>님
+						
+						<i id="user_icon" class="fa-solid fa-user"></i><%=nick %>님
 					</button>
 					<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 						<li><a class="dropdown-item" href="#">계정 설정</a></li>
