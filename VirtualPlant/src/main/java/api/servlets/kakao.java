@@ -30,8 +30,8 @@ public class kakao extends HttpServlet {
 		System.out.println(id);
 		System.out.println(email);
 		System.out.println(name);
-		String sql = "insert into kakao_users values(?,?,?);";
-		String findIdSql = "select * from kakao_users where id=?";
+		String sql = "insert into users(id,email,user_name,user_type) values(?,?,?,?);";
+		String findIdSql = "select * from users where id=?";
 		try (Connection conn = DBConn.getConnection();
 			PreparedStatement findStmt = conn.prepareStatement(findIdSql);
 			PreparedStatement insertStmt = conn.prepareStatement(sql);){
@@ -43,6 +43,7 @@ public class kakao extends HttpServlet {
 				insertStmt.setString(1, id);
 				insertStmt.setString(2, email);
 				insertStmt.setString(3, name);
+				insertStmt.setString(4, "kakao");
 				
 				int rowsAffected = insertStmt.executeUpdate();
 				if (rowsAffected > 0) {

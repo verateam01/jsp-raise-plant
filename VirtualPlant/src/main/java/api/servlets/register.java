@@ -29,14 +29,14 @@ public class register extends HttpServlet {
 		System.out.println(nick);
 		System.out.println(id);
 		System.out.println(pw);
-		String sql = "insert into users(name,nick,id,pw) values(?,?,?,?)";
+		String sql = "insert into users(id,pw,user_name,user_nick) values(?,?,?,?)";
 		
 		try(Connection conn = DBConn.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(sql)){
-			 pstmt.setString(1, name);
-			 pstmt.setString(2, nick);
-			 pstmt.setString(3, id);
-			 pstmt.setString(4, pw);
+			 pstmt.setString(1, id);
+			 pstmt.setString(2, pw);
+			 pstmt.setString(3, name);
+			 pstmt.setString(4, nick);
 			 System.out.println("db데이터 넣기완료");
 			 int affectedRows = pstmt.executeUpdate();
 			System.out.println(affectedRows);

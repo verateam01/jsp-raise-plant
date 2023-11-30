@@ -27,7 +27,7 @@
 		String kakaoUser = (String)session.getAttribute("kakao_user");
 		String id;
 		if(user != null){
-		    id = user.getId();
+		    id = user.getNick();
 		} else if(kakaoUser != null){
 		    id = kakaoUser;
 		} else {
@@ -101,7 +101,6 @@
 						<li><a class="dropdown-item" href="#" onclick="logout()">로그아웃</a></li>
 					</ul>
 				</div>
-
 			</div>
 		</div>
 	</div>

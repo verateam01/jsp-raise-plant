@@ -32,11 +32,12 @@ public class login extends HttpServlet {
 			pstmt.setString(1, id);
 			pstmt.setString(2, pw);
 			ResultSet rs = pstmt.executeQuery();
-			
+			   System.out.println(rs);
 			if (rs.next()) {
 				loginUser = new User();
 				loginUser.setId(rs.getString("id"));
 				loginUser.setPw(rs.getString("pw"));
+				loginUser.setNick(rs.getString("user_nick"));
             }
 
         } catch (SQLException e) {

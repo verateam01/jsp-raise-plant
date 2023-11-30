@@ -19,7 +19,7 @@
             /* 기본 패딩 제거 */
         }
 img {
-	height: 80%;
+   height: 80%;
   object-fit: cover;
 }
         #container {
@@ -50,9 +50,9 @@ img {
         flex:1;
         
         }
-		#day_text{
-		flex:1;
-		}
+      #day_text{
+      flex:1;
+      }
         #day_skip_button{
         justify-content: center;
         flex:1;
@@ -72,7 +72,7 @@ img {
         #action_area {
             width: 70%;
             padding-top: 30px;
-            margin: 0 auto;
+            margin: 0
         }
 
         .buttons_container {
