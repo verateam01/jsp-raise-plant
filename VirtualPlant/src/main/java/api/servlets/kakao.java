@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import db.util.DBConn;
+import model.User;
 
 @WebServlet("/api/login/kakao")
 public class kakao extends HttpServlet {
@@ -40,7 +41,7 @@ public class kakao extends HttpServlet {
 			ResultSet rs = findStmt.executeQuery();
 			
 			if(!rs.next()) {
-				insertStmt.setString(1, id);
+				insertStmt.setString(1, id); 
 				insertStmt.setString(2, email);
 				insertStmt.setString(3, name);
 				insertStmt.setString(4, "kakao");
@@ -48,8 +49,8 @@ public class kakao extends HttpServlet {
 				int rowsAffected = insertStmt.executeUpdate();
 				if (rowsAffected > 0) {
 					System.out.println("DB 저장 성공");
-					request.getSession().setAttribute("kakao_user", name);
-					System.out.println("세션에 kakao_user 설정됨: " + name);
+					request.getSession().setAttribute("kakao_name", name);
+					request.getSession().setAttribute("kakao_id", id);
 					response.setContentType("application/json");
 		            response.setCharacterEncoding("UTF-8");
 					response.getWriter().write("{\"status\":\"success\"}");

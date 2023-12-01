@@ -1,3 +1,5 @@
+<%@ page import="java.sql.*" %>
+<%@ page import="db.util.DBConn" %>
 <%@page import="model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -13,22 +15,27 @@
     <!-- Font-awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 </head>
 <body>
-    <%
+<%
         User user = (User)session.getAttribute("user");
-        String kakaoUser = (String)session.getAttribute("kakao_user");
+        String kakaoUserName = (String)session.getAttribute("kakao_name");
+        String kakaoId = (String)session.getAttribute("kakao_id");
+        String name;
         String id;
         if(user != null){
-            id = user.getNick();
-        } else if(kakaoUser != null){
-            id = kakaoUser;
+            name = user.getNick();
+            id = user.getId();
+        } else if(kakaoUserName != null){
+            name = kakaoUserName;
+            id = kakaoId;
         } else {
-            // Uncomment the following line to enable redirection to the login page
-            // response.sendRedirect("/login");
+            response.sendRedirect("/login");
             return;
         }
     %>
+    
     <div id="container">
         <div id="day_info">
             <div id="day_left"></div>
@@ -54,13 +61,13 @@
                 </div>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="../../img/plant_img/Gardenia1.jpg" class="d-block" alt="...">
+                        <img src="../../img/plant_img/Gardenia1.jpg" class="d-block" alt="..." data-plant-id="1">
                     </div>
                     <div class="carousel-item">
-                        <img src="../../img/plant_img/Hyacinth1.jpg" class="d-block" alt="...">
+                        <img src="../../img/plant_img/Hyacinth1.jpg" class="d-block" alt="..." data-plant-id="2">
                     </div>
                     <div class="carousel-item">
-                        <img src="../../img/plant_img/Cactus1.jpg" class="d-block" alt="...">
+                        <img src="../../img/plant_img/Cactus1.jpg" class="d-block" alt="..." data-plant-id="3">
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -75,7 +82,7 @@
         </div>
         <div id="action_area">
             <div class="buttons_container">
-                <button class="action_button">물주기</button>
+                <button class="water action_button">물주기</button>
                 <button class="action_button">비료주기</button>
                 <button class="action_button">말하기</button>
             </div>
@@ -89,7 +96,7 @@
 
         <div id="user_menu" class="dropdown">
             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                <i id="user_icon" class="fa-solid fa-user"></i><%=id %>님
+                <i id="user_icon" class="fa-solid fa-user"></i><%=name %>님
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li><a class="dropdown-item" href="#">계정 설정</a></li>
@@ -101,6 +108,7 @@
     </div> 
 
     <script>
+    /*로그아웃로직*/
         function kakaoLogout() {
             if (Kakao.Auth.getAccessToken()) {
                 Kakao.Auth.logout(function(){
@@ -110,8 +118,7 @@
             }
         }
         function logout(){
-            let kakaoUser = "<%=kakaoUser%>"
-            console.log(kakaoUser);
+            let kakaoUser = "<%=kakaoUserName%>"
             if(Kakao.Auth.getAccessToken() != null){
                 kakaoLogout();
                 console.log('로직실행');
@@ -132,8 +139,52 @@
             }
         }
     </script>
+    
+    <script>
+    /* 식물 정보가져오는 로직*/
+    $(document).ready(function() {
+    	let userId = "<%= id %>"
+    	
+    	const sendAjaxRequest = (url, type, data, successCallback) => {
+    		$.ajax({
+    			url: url,
+    			type: type,
+    			data: data,
+    			success: successCallback,
+    		})
+    	}
+    	
+    	const fetchPlantData = (plantId) => {
+    		sendAjaxRequest('/api/plant/info','GET',{userId:userId,plantId:plantId},(response)=>{
+    			console.log(response);
+    		})
+    	}
+    	
+    	const waterPlant = (plantId) => {
+    		sendAjaxRequest('/api/plant/water','POST',{userId:userId, plantId:plantId},(response)=>{
+    			console.log(response);
+    		})
+    	}
+    	
+        let	firstPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
+       	fetchPlantData(firstPlantId);        
+        $('#carouselExampleIndicators').on('slid.bs.carousel',function(){
+        	  let plantId = $(this).find('.carousel-item.active img').data('plant-id');
+        	   fetchPlantData(plantId);
+   	    });
+     	   
+    	$('.water').click(()=>{
+    		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
+    		console.log("현재클릭한식물:",currentPlantId);
+            waterPlant(currentPlantId);
+    	})    
+	 });
+    
+    
+    </script>
+    
     <!-- jQuery and Bootstrap Bundle -->
-    <script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+    
     <script src="${pageContext.request.contextPath}/resources/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

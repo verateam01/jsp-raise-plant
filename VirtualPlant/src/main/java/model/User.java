@@ -6,6 +6,7 @@ public class User {
 	private String id;
 	private String pw;
 	
+	
 	public User() {}
 	public User(String name, String nick, String id, String pw) {
 		this.name = name;
@@ -45,6 +46,9 @@ public class User {
 	public void setPw(String pw) {
 		this.pw = pw;
 	}
+	
+	
+	
 	
 	
 	
