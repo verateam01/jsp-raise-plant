@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/views/login/login.css">
 <!-- jQuery -->
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery.min.js">
@@ -25,7 +26,7 @@
 		<p>비밀번호</p>
 	<input type="password" class="form-control mb-4 p-3" placeholder="비밀번호" name="pw"/>
 	<div class="d-flex justify-content-end mt-3">
-		<button id="loginButton" class="btn btn-primary"style="width: 90px;">로그인</button>
+		<button id="loginButton" class="btn btn-primary" style="width: 90px; background-color: #f97178; border:none;">로그인</button>
 	</div>
 	<div class="d-flex flex-column align-middle">
 		<p>소셜로그인</p>
