@@ -64,7 +64,6 @@ public class plantinfo extends HttpServlet {
                         
                         
                     	JSONObject json = new JSONObject();
-                        json.put("userId", rs.getInt("user_id"));
                         json.put("plantId", rs.getInt("plant_id"));
                         json.put("affection", rs.getInt("affection"));
                         json.put("currStage", rs.getInt("curr_stage"));

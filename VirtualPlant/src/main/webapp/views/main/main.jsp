@@ -83,7 +83,7 @@
         <div id="action_area">
             <div class="buttons_container">
                 <button class="water action_button">물주기</button>
-                <button class="action_button">비료주기</button>
+                <button class="fertilized action_button">비료주기</button>
                 <button class="action_button">말하기</button>
             </div>
             <div class="input_container">
@@ -159,9 +159,19 @@
     			console.log(response);
     		})
     	}
-    	
+    	/* 물주기 */
     	const waterPlant = (plantId) => {
-    		sendAjaxRequest('/api/plant/water','POST',{userId:userId, plantId:plantId},(response)=>{
+    		let now = new Date();
+    		now.setHours(now.getHours()+9);
+    	    let formattedDateTime = now.toISOString().slice(0, 19).replace('T', ' ');
+    	    
+    		sendAjaxRequest('/api/plant/water','POST',{userId:userId, plantId:plantId,lastWaterd:formattedDateTime},(response)=>{
+    			console.log('waterPlant',response);
+    		})
+    	}
+    	/* 비료주기 */
+    	const fertilizedPlant = (plantId) => {
+    		sendAjaxRequest('/api/plant/fertilized','POST',{userId:userId, plantId:plantId},(response)=>{
     			console.log(response);
     		})
     	}
@@ -175,9 +185,13 @@
      	   
     	$('.water').click(()=>{
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
-    		console.log("현재클릭한식물:",currentPlantId);
             waterPlant(currentPlantId);
     	})    
+    	
+    	$('.fertilized').click(()=>{
+    		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
+            fertilizedPlant(currentPlantId);
+    	})
 	 });
     
     
