@@ -7,6 +7,7 @@
 <title>회원가입 페이지</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/views/register/register.css">
 <!-- jQuery -->
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery.min.js">
@@ -19,6 +20,7 @@
 </head>
 <body>
 	<div class="container d-flex flex-column" style="height: 100vh;">
+	<div style="margin: 50px;">
 		<h1>회원가입</h1>
 		<p class="m-0 p-2">이름</p>
 		<input type="text" class="form-control" placeholder="이름" name="name" />
@@ -26,14 +28,15 @@
 		<input type="text" class="form-control" placeholder="닉네임" name="nick" />
 		<p class="m-0 p-2">
 			아이디
-			<button id="duplicatedId" class="btn btn-primary">중복확인</button>
+			<button id="duplicatedId" class="btn btn-primary"; style="margin-left: 20px;background-color: #f97178; border:none;">중복확인</button>
 		</p>
 		<input type="text" class="form-control" placeholder="아이디" name="id" />
 		<p class="m-0 p-2">비밀번호</p>
 		<input type="password" class="form-control" placeholder="비밀번호" name="pw" />
 		<div class="d-flex justify-content-end mt-3">
 			<button id="registerButton" class="btn btn-primary"
-				style="width: 90px;">회원가입</button>
+				style="width: 90px; background-color: #f97178; border:none;">회원가입</button>
+		</div>
 		</div>
 	</div>
 
