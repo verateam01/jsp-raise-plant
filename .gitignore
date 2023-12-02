@@ -1,4 +1,4 @@
 /.metadata/
 
 # Ignore config
-config.properties
+VirtualPlant/src/main/java/config.properties

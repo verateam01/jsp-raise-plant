@@ -51,7 +51,7 @@ public class water extends HttpServlet {
 						
 						int waterCount = rsWaterCount.getInt("water_count");
 						Timestamp lastWateredTimestamp = rsWaterCount.getTimestamp("last_watered");
-						//last_water시간이 null일경우 시간넣
+						//last_water시간이 null일경우 시간넣기
 						if(lastWateredTimestamp == null) {
 							try(PreparedStatement updateLastWaterTime=conn.prepareStatement(updateLastWaterTimeSql)){
 								updateLastWaterTime.setString(1, lastWatered);

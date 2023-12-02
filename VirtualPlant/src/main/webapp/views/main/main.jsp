@@ -16,6 +16,34 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+    <style>
+    .speech-bubble {
+		position: absolute;
+		border:6px solid #f97178;
+		border-radius: .4em;
+		width: 350px;
+		min-height:150px;
+		padding:10px;
+		color:black;
+		top:50px;
+		right:40px;
+		z-index:1;
+		word-wrap: break-word;
+	}
+
+	.speech-bubble:after {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 50%;
+		border: 40px solid transparent;
+		border-right-color: #f97178;
+		border-left: 0;
+		border-bottom: 0;
+		margin-top: -20px;
+		margin-left: -40px;
+	}
+    </style>
 </head>
 <body>
 <%
@@ -52,14 +80,20 @@
             </div>
             <i class="fa-solid fa-heart fa-2xl" style="color: #ff7575; margin: auto;"></i>
         </div>
-        <div id="plant_area">
+        <div id="plant_area" class="position-relative">
+        
+        	<div class="speech-bubble">
+        		<div id="loading" style="display:none;">생각중...</div>
+        	</div>
+        	
             <div id="carouselExampleIndicators" class="carousel slide" data-bs-interval="false">
                 <div class="carousel-indicators">
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
                 </div>
-                <div class="carousel-inner">
+                <div class="carousel-inner ">
+                	
                     <div class="carousel-item active">
                         <img src="../../img/plant_img/Gardenia1.jpg" class="d-block" alt="..." data-plant-id="1">
                     </div>
@@ -88,8 +122,8 @@
             </div>
             <div class="input_container">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="식물에게 말을 걸어봐요!" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">입력</button>
+                    <input type="text" id="chat" class="form-control" placeholder="식물에게 말을 걸어봐요!" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="sendGptRequest()">입력</button>
                 </div>
             </div>
         </div>
@@ -193,8 +227,28 @@
             fertilizedPlant(currentPlantId);
     	})
 	 });
-    
-    
+    </script>
+    <!-- gpt로직 -->
+    <script>
+    const sendGptRequest = () => {
+        let chatInput = $('#chat').val();
+        // 식물 캐릭터의 성격과 말투를 반영하는 프롬프트
+        let prompt = `간단하고 순수한 어휘 사용, 궁금한 것에 대한 무한한 호기심, 그리고 어린아이와 같은 단순하고 직관적인 사고 방식, 귀엽고 긍정적인 어휘를 사용해서 대답해줘. 너의 이름은 [식물이]이야. ${chatInput}`;
+		$('#loading').show();
+        $.ajax({
+            url: '/api/gpt',
+            type: 'GET',
+            data: {'prompt': prompt},
+            success: (response) => {
+                console.log(response);
+                $('.speech-bubble').html(response.answer);
+                $('#loading').hide();
+            },
+            error: (error) => {
+                console.log('Error:', error);
+            }
+        });
+    }
     </script>
     
     <!-- jQuery and Bootstrap Bundle -->
