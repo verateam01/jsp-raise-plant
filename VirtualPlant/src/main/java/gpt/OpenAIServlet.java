@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
+import config.Config;
+
 
 
 
@@ -30,7 +32,7 @@ public class OpenAIServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String prompt =	request.getParameter("prompt");
-        String apiKey = "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"; // OpenAI API 키
+        String apiKey = Config.getProperty("gpt.key"); // OpenAI API 키
         String data = "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" + prompt + "\"}], \"max_tokens\": 150}";
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest httpRequest = HttpRequest.newBuilder()

@@ -76,7 +76,7 @@
         </div>
         <div id="heart_content">
             <div id="heart_gauge" style="margin: 0 auto;">
-                <div id="gauge-fill" style="width: 55%;"></div>
+                <div id="gauge-fill"></div>
             </div>
             <i class="fa-solid fa-heart fa-2xl" style="color: #ff7575; margin: auto;"></i>
         </div>
@@ -201,12 +201,14 @@
     	    
     		sendAjaxRequest('/api/plant/water','POST',{userId:userId, plantId:plantId,lastWaterd:formattedDateTime},(response)=>{
     			console.log('waterPlant',response);
+    			fetchPlantData(currentPlantId);
     		})
     	}
     	/* 비료주기 */
     	const fertilizedPlant = (plantId) => {
     		sendAjaxRequest('/api/plant/fertilized','POST',{userId:userId, plantId:plantId},(response)=>{
     			console.log(response);
+    			fetchPlantData(currentPlantId);
     		})
     	}
     	
@@ -220,13 +222,31 @@
     	$('.water').click(()=>{
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
             waterPlant(currentPlantId);
+            
     	})    
     	
     	$('.fertilized').click(()=>{
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
             fertilizedPlant(currentPlantId);
     	})
+    	
+    	// 애정도 로직
+    	const favorablePlant = (plantId) => {
+    	    sendAjaxRequest('/api/plant/info', 'GET', { userId: userId, plantId: plantId }, (response) => {
+    	        console.log(response);
+    	        if (response && response.affection) {
+    	            
+
+    	            // 애정도를 100으로 나눈 나머지를 사용
+    	            let affectionPercentage = response.affection % 100;
+    	            $('#gauge-fill').css('width', affectionPercentage + '%');
+    	            console.log("애정도바는", affectionPercentage);
+    	        }
+    	    });
+    	};
+
 	 });
+        
     </script>
     <!-- gpt로직 -->
     <script>
