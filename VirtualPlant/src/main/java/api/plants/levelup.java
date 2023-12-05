@@ -67,9 +67,6 @@ public class levelup extends HttpServlet {
 							            if(updatedRs.next()) {
 							                int updatedCurrStage = updatedRs.getInt("curr_stage");
 							                int updatedAffection = updatedRs.getInt("affection");
-							                
-							                System.out.println(updatedCurrStage);
-							                System.out.println(updatedAffection);
 							                JSONObject json = new JSONObject();
 							                json.put("currStage", updatedCurrStage);
 							                json.put("affection", updatedAffection);
@@ -82,6 +79,7 @@ public class levelup extends HttpServlet {
 								}
 							}
 						}
+						
 							
 					}
 				}

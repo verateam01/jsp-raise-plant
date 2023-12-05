@@ -6,7 +6,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>버츄얼플랜트</title>
+    <title>VirtualPlant</title>
     <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.5.0/kakao.min.js"></script>
     <script>Kakao.init('baf124810d0cd543bcd9dba2e0cf58f6');</script>
     <!-- Bootstrap CSS -->
@@ -137,9 +137,9 @@ content: "";
         </div>
         <div id="action_area">
             <div class="buttons_container">
-                <button class="water action_button">물주기</button>
-                <button class="fertilized action_button">비료주기</button>
-                <button class="action_button">말하기</button>
+                <button class="water-button action_button">물주기</button>
+                <button class="fertilized-button action_button">비료주기</button>
+                <button class="refresh-button btn btn-outline-primary action_button">Refresh</button>
             </div>
             <div class="input_container">
                 <div class="input-group mb-3">
@@ -176,14 +176,6 @@ $(document).ready(function() {
     	let userId = "<%= id %>"
     	let	firstPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
     	
-    	
-    	const fetchPlantData = (plantId) => {
-    		sendAjaxRequest('/api/plant/info','GET',{userId:userId,plantId:plantId},(response)=>{
-    			console.log(response);
-    			affectionBarUpdate(response.affection);
-    		})
-    	}
-    	
     	/*
     	* @count: 주기 횟수
     	* @type: water, fertilized 
@@ -206,16 +198,22 @@ $(document).ready(function() {
     		},5000)
     	}
     	
-    	// 애정도바 업데이트
+    	/*애정도바 길이조절 함수*/
     	const affectionBarUpdate = (affection) => {
     		if (affection > 100){
     			affection = affection (affection % 100);
     		}
             $('#gauge-fill').css('width', affection + '%');
-            console.log("애정도수치", affection);
+            console.log("애정도수치:", affection);
     	}
-        
-    	/*처음로딩시 PlantData*/
+    	/*식물데이터 얻어오는 함수*/
+    	const fetchPlantData = (plantId) => {
+    		sendAjaxRequest('/api/plant/info','GET',{userId:userId,plantId:plantId},(response)=>{
+    			console.log(response);
+    			affectionBarUpdate(response.affection);
+    		},(error)=>{console.log(error)})
+    	}
+    	
        	fetchPlantData(firstPlantId);
        	
     	/*슬라이드 넘길시 로직*/
@@ -224,36 +222,41 @@ $(document).ready(function() {
         	   fetchPlantData(plantId);
         	   $('.think-answer').html('');
    	    });
-        /* 물주기 */   
-    	$('.water').click(()=>{
+        /* 물주기로직 */   
+    	$('.water-button').click(()=>{
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
-            waterPlant(currentPlantId);
-    	})    
-    	
-    	const waterPlant = (plantId) => {
-    		let now = new Date();
+            let now = new Date();
     		now.setHours(now.getHours()+9);
     	    let formattedDateTime = now.toISOString().slice(0, 19).replace('T', ' ');
     	    
-    		sendAjaxRequest('/api/plant/water','POST',{userId:userId, plantId:plantId,lastWaterd:formattedDateTime},(response)=>{
+    		sendAjaxRequest('/api/plant/water','POST',{userId:userId, plantId:currentPlantId,lastWaterd:formattedDateTime},(response)=>{
     			console.log('waterPlant',response);
     			affectionBarUpdate(response.affection);
 				answerSpeech(response.waterCount,"water");    			
     		})
-    	}
-    	/* 비료주기 */
-    	$('.fertilized').click(()=>{
+    	})    
+    	
+    	/* 비료주기 로직*/
+    	$('.fertilized-button').click(()=>{
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
-            fertilizedPlant(currentPlantId);
-    	})
-    	
-    	
-    	const fertilizedPlant = (plantId) => {
-    		sendAjaxRequest('/api/plant/fertilized','POST',{userId:userId, plantId:plantId},(response)=>{
+            sendAjaxRequest('/api/plant/fertilized','POST',{userId:userId, plantId:plantId},(response)=>{
     			console.log(response);
     			fetchPlantData(currentPlantId);    			
     		})
-    	}
+    	})
+    	
+    	/*리프레시 버튼 로직*/
+    	$('.refresh-button').click(()=>{
+    		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
+    		
+    		sendAjaxRequest('/api/plant/refresh','POST',{userId:userId,plantId:currentPlantId},(response)=>{
+    			console.log(response);
+    			affectionBarUpdate(response.affection);
+    		})
+    	})
+    	
+    
+    	
     	/*단계업그레이드 로직*/
     	$('.next-stage').click(()=>{
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
@@ -268,9 +271,8 @@ $(document).ready(function() {
     <script>
     const sendGptRequest = () => {
         let chatInput = $('#chat').val();
-       	console.log(chatInput);
-        // 식물 캐릭터의 성격과 말투를 반영하는 프롬프트
         let prompt = "간단하고 순수한 어휘 사용, 궁금한 것에 대한 무한한 호기심, 그리고 어린아이와 같은 단순하고 직관적인 사고 방식, 귀엽고 긍정적인 어휘를 사용해서 대답해줘. 너의 이름은 [식물이]이야. 이제 이 다음에 질문한것에대한 대답을해줘 " + chatInput;
+        
         $('.think-answer').html('');
 		$('#loading').show();
 		
@@ -278,7 +280,7 @@ $(document).ready(function() {
         	console.log(response);
             $('.think-answer').html(response.answer);
             $('#loading').hide();
-        },(error)=>{console.log(error)})
+        },(error)=>console.log(error))
     }
     </script>
     <script>
