@@ -17,7 +17,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import db.util.DBConn;
-import model.Plant;
 
 
 @WebServlet("/api/plant/info")

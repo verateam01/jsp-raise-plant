@@ -1,4 +1,4 @@
-package api.servlets;
+package api.auth;
 
 import java.io.IOException;
 import java.sql.Connection;

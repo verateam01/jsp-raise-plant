@@ -105,18 +105,12 @@ public class water extends HttpServlet {
 				                        response.getWriter().write(json.toString());
 									}
 								}
-						}
-							
-						} catch (Exception e) {
-							// TODO: handle exception
+							}
 						}
 						
 					}
 					
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				}
+				} 
 			}
 			
 			} catch (Exception e) {

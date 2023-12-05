@@ -3,7 +3,7 @@
 <%@page import="model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>버츄얼플랜트</title>
@@ -15,7 +15,6 @@
     <!-- Font-awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
     <style>
     .speech-bubble {
 		position: absolute;
@@ -62,9 +61,17 @@
             response.sendRedirect("/login");
             return;
         }
-    %>
+        
+       	int affection = 0;
+        
+       
+%>
+
+
+
     
     <div id="container">
+    	<%= affection %>
         <div id="day_info">
             <div id="day_left"></div>
             <div id="day_text">
@@ -79,9 +86,9 @@
                 <div id="gauge-fill" style="width: 55%;"></div>
             </div>
             <i class="fa-solid fa-heart fa-2xl" style="color: #ff7575; margin: auto;"></i>
+            
         </div>
         <div id="plant_area" class="position-relative">
-        
         	<div class="speech-bubble">
         		<div id="loading" style="display:none;">생각중...</div>
         	</div>
@@ -113,6 +120,9 @@
                     <span class="visually-hidden">Next</span>
                 </button>
             </div>
+            <div class="position-absolute bottom-0 end-0">
+	            <button class="next-stage btn btn-outline-danger">Level Up!</button>
+            </div>
         </div>
         <div id="action_area">
             <div class="buttons_container">
@@ -136,61 +146,29 @@
                 <li><a class="dropdown-item" href="#">계정 설정</a></li>
                 <li><a class="dropdown-item" href="#">도움말</a></li>
                 <li><a class="dropdown-item" href="#">관리자 메뉴</a></li>
-                <li><a class="dropdown-item" href="#" onclick="logout()">로그아웃</a></li>
+                <li><a class="dropdown-item" href="#" onclick="logout('<%=kakaoUserName %>')">로그아웃</a></li>
             </ul>
         </div>
     </div> 
+<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+<script>
+const sendAjaxRequest = (url, type, data, successCallback,errorCallback) => {
+	$.ajax({
+		url: url,
+		type: type,
+		data: data,
+		success: successCallback,
+		error:errorCallback
+	})
+}
 
-    <script>
-    /*로그아웃로직*/
-        function kakaoLogout() {
-            if (Kakao.Auth.getAccessToken()) {
-                Kakao.Auth.logout(function(){
-                    window.location.href="/login";
-                    console.log('로그아웃완료');
-                })
-            }
-        }
-        function logout(){
-            let kakaoUser = "<%=kakaoUserName%>"
-            if(Kakao.Auth.getAccessToken() != null){
-                kakaoLogout();
-                console.log('로직실행');
-            }
-            else{
-                $.ajax({
-                    url:"/api/logout",
-                    type:"POST",
-                    success:(res)=>{
-                        if(res.status == "success"){
-                            window.location.href="/login";
-                        }
-                    },
-                    error:(error)=>{
-                        console.log('에러발생',error);
-                    }
-                })
-            }
-        }
-    </script>
-    
-    <script>
-    /* 식물 정보가져오는 로직*/
-    $(document).ready(function() {
+$(document).ready(function() {
     	let userId = "<%= id %>"
-    	
-    	const sendAjaxRequest = (url, type, data, successCallback) => {
-    		$.ajax({
-    			url: url,
-    			type: type,
-    			data: data,
-    			success: successCallback,
-    		})
-    	}
     	
     	const fetchPlantData = (plantId) => {
     		sendAjaxRequest('/api/plant/info','GET',{userId:userId,plantId:plantId},(response)=>{
     			console.log(response);
+    			
     		})
     	}
     	/* 물주기 */
@@ -228,27 +206,27 @@
     	})
 	 });
     </script>
-    <!-- gpt로직 -->
     <script>
     const sendGptRequest = () => {
         let chatInput = $('#chat').val();
+       	console.log(chatInput);
         // 식물 캐릭터의 성격과 말투를 반영하는 프롬프트
-        let prompt = `간단하고 순수한 어휘 사용, 궁금한 것에 대한 무한한 호기심, 그리고 어린아이와 같은 단순하고 직관적인 사고 방식, 귀엽고 긍정적인 어휘를 사용해서 대답해줘. 너의 이름은 [식물이]이야. ${chatInput}`;
+        let prompt = "간단하고 순수한 어휘 사용, 궁금한 것에 대한 무한한 호기심, 그리고 어린아이와 같은 단순하고 직관적인 사고 방식, 귀엽고 긍정적인 어휘를 사용해서 대답해줘. 너의 이름은 [식물이]이야. 이제 이 다음에 질문한것에대한 대답을해줘 " + chatInput;
 		$('#loading').show();
-        $.ajax({
-            url: '/api/gpt',
-            type: 'GET',
-            data: {'prompt': prompt},
-            success: (response) => {
-                console.log(response);
-                $('.speech-bubble').html(response.answer);
-                $('#loading').hide();
-            },
-            error: (error) => {
-                console.log('Error:', error);
-            }
-        });
+        sendAjaxRequest('/api/gpt','GET',{prompt:prompt},(response)=>{
+        	console.log(response);
+            $('.speech-bubble').html(response.answer);
+            $('#loading').hide();
+        },(error)=>{console.log(error)})
     }
+    </script>
+    <script>
+    	$('.next-stage').click(()=>{
+    		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
+            sendAjaxRequest('api/plant/levelup','POST',{userId:userId,plantId:currentPlantId},(response)=>{
+            	console.log(response)
+            })
+    	})
     </script>
     
     <!-- jQuery and Bootstrap Bundle -->

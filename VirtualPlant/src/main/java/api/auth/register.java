@@ -1,4 +1,4 @@
-package api.servlets;
+package api.auth;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import db.util.DBConn;
-import model.Plant;
 
 @WebServlet("/api/register")
 public class register extends HttpServlet {
@@ -63,17 +62,13 @@ public class register extends HttpServlet {
 						                try (ResultSet plansGeneratedKeys = user_plants_pstmt.getGeneratedKeys()) {
 						                    if (plansGeneratedKeys.next()) {
 						                        int userPlantId = plansGeneratedKeys.getInt(1);
-
-
 						                        plants_pstmt.setInt(1, userPlantId);
 						                        plants_pstmt.setString(2, plants[i-1]);
 						                        plants_pstmt.executeUpdate();
 						                    }
 						                
 						            	}
-
-				                
-				            }
+				            	 }
 				        }
 				    }
 				}
