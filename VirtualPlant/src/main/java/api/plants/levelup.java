@@ -32,7 +32,7 @@ public class levelup extends HttpServlet {
 		
 		String findUserId = "select * from users where id=?";
 		String findPlantInfo="select * from user_plants where user_id = ? and plant_id = ?;";
-		String updatePlantStage = "update set curr_stage = ?, affection = ? where user_id = ? and plant_id";
+		String updatePlantStage = "UPDATE user_plants SET curr_stage = ?, affection = ? WHERE user_id = ? AND plant_id = ?";
 		try (Connection conn = DBConn.getConnection();
 				PreparedStatement findUserPstmt = conn.prepareStatement(findUserId)){
 			findUserPstmt.setString(1,userId);
@@ -68,17 +68,18 @@ public class levelup extends HttpServlet {
 							                int updatedCurrStage = updatedRs.getInt("curr_stage");
 							                int updatedAffection = updatedRs.getInt("affection");
 							                
+							                System.out.println(updatedCurrStage);
+							                System.out.println(updatedAffection);
 							                JSONObject json = new JSONObject();
-							                json.put("curr_stage", updatedCurrStage);
+							                json.put("currStage", updatedCurrStage);
 							                json.put("affection", updatedAffection);
-
+							                
 							                response.setContentType("application/json");
 							                response.setCharacterEncoding("UTF-8");
 							                response.getWriter().write(json.toString());
 							            }
 							        }
 								}
-								
 							}
 						}
 							

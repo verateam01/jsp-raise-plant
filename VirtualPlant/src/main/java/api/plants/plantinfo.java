@@ -62,6 +62,7 @@ public class plantinfo extends HttpServlet {
                         Timestamp lastFertilizedTimestamp = rs.getTimestamp("last_fertilized");
                         
                         
+						
                     	JSONObject json = new JSONObject();
                         json.put("plantId", rs.getInt("plant_id"));
                         json.put("affection", rs.getInt("affection"));
