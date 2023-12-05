@@ -7,15 +7,18 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 
 import db.util.DBConn;
+import model.Plant;
 
 @WebServlet("/api/plant/water")
 public class water extends HttpServlet {
@@ -90,6 +93,8 @@ public class water extends HttpServlet {
 										System.out.println("실행완료");
 										Timestamp lastWateredTimes = result.getTimestamp("last_watered");
 										Timestamp lastFertilizedTimestamp = result.getTimestamp("last_fertilized");
+										
+								
 										
 										JSONObject json = new JSONObject();
 										json.put("plantId",result.getInt("plant_id"));

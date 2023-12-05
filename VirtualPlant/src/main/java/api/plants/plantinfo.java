@@ -7,11 +7,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +65,7 @@ public class plantinfo extends HttpServlet {
                         Timestamp lastFertilizedTimestamp = rs.getTimestamp("last_fertilized");
                         
                         
+						
                     	JSONObject json = new JSONObject();
                         json.put("plantId", rs.getInt("plant_id"));
                         json.put("affection", rs.getInt("affection"));

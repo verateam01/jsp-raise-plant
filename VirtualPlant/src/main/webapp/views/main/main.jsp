@@ -17,32 +17,47 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
     <style>
-    .speech-bubble {
-		position: absolute;
-		border:6px solid #f97178;
-		border-radius: .4em;
-		width: 350px;
-		min-height:150px;
-		padding:10px;
-		color:black;
-		top:50px;
-		right:40px;
-		z-index:1;
-		word-wrap: break-word;
-	}
+.speech-bubble {
+    position: relative;
+	padding: 10px 10px 10px 10px;
+	background: #FFFFFF;
+	border-radius: 5px;
+	border: 4px solid #00bfb6;
+	position: absolute;
+	font-size: 16px;
+	text-align: left;
+	width: 300px;
+	height: 150px;
+	top: 50px;
+    right: 40px;
+    z-index: 1;
+}
 
-	.speech-bubble:after {
-		content: '';
-		position: absolute;
-		left: 0;
-		top: 50%;
-		border: 40px solid transparent;
-		border-right-color: #f97178;
-		border-left: 0;
-		border-bottom: 0;
-		margin-top: -20px;
-		margin-left: -40px;
-	}
+.speech-bubble:after {
+    content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 10px solid #fff;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #fff;
+  border-bottom: 10px solid transparent;
+  left: 24px;
+  bottom: -13px; 
+}
+.speech-bubble:before{
+content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 10px solid #00bfb6;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #00bfb6;
+  border-bottom: 10px solid transparent;
+  left: 20px;
+  bottom: -23px;
+}
+
     </style>
 </head>
 <body>
@@ -63,6 +78,7 @@
             return;
         }
     %>
+              
     
     <div id="container">
         <div id="day_info">
@@ -78,7 +94,11 @@
             <div id="heart_gauge" style="margin: 0 auto;">
                 <div id="gauge-fill"></div>
             </div>
-            <i class="fa-solid fa-heart fa-2xl" style="color: #ff7575; margin: auto;"></i>
+            <i class="fa-solid fa-heart fa-2xl" style="color: #ff7575;  margin: auto;"></i>
+            
+
+
+
         </div>
         <div id="plant_area" class="position-relative">
         
@@ -134,7 +154,6 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li><a class="dropdown-item" href="#">계정 설정</a></li>
-                <li><a class="dropdown-item" href="#">도움말</a></li>
                 <li><a class="dropdown-item" href="#">관리자 메뉴</a></li>
                 <li><a class="dropdown-item" href="#" onclick="logout()">로그아웃</a></li>
             </ul>
@@ -187,11 +206,22 @@
     			success: successCallback,
     		})
     	}
+
     	
     	const fetchPlantData = (plantId) => {
     		sendAjaxRequest('/api/plant/info','GET',{userId:userId,plantId:plantId},(response)=>{
     			console.log(response);
+    			affectionBarUpdate(response.affection);
     		})
+    	}
+    	// 애정도
+    	const affectionBarUpdate = (affection) => {
+    		if (affection > 100){
+    			affection = affection (affection % 100);
+    		}
+            $('#gauge-fill').css('width', affection + '%');
+            console.log("애정도바는", affection);
+            
     	}
     	/* 물주기 */
     	const waterPlant = (plantId) => {
@@ -201,16 +231,19 @@
     	    
     		sendAjaxRequest('/api/plant/water','POST',{userId:userId, plantId:plantId,lastWaterd:formattedDateTime},(response)=>{
     			console.log('waterPlant',response);
-    			fetchPlantData(currentPlantId);
+    			affectionBarUpdate(response.affection);
+    			
     		})
     	}
     	/* 비료주기 */
     	const fertilizedPlant = (plantId) => {
     		sendAjaxRequest('/api/plant/fertilized','POST',{userId:userId, plantId:plantId},(response)=>{
     			console.log(response);
-    			fetchPlantData(currentPlantId);
+    			fetchPlantData(currentPlantId);    			
     		})
     	}
+    	
+    	
     	
         let	firstPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
        	fetchPlantData(firstPlantId);        
@@ -230,20 +263,8 @@
             fertilizedPlant(currentPlantId);
     	})
     	
-    	// 애정도 로직
-    	const favorablePlant = (plantId) => {
-    	    sendAjaxRequest('/api/plant/info', 'GET', { userId: userId, plantId: plantId }, (response) => {
-    	        console.log(response);
-    	        if (response && response.affection) {
-    	            
+    	
 
-    	            // 애정도를 100으로 나눈 나머지를 사용
-    	            let affectionPercentage = response.affection % 100;
-    	            $('#gauge-fill').css('width', affectionPercentage + '%');
-    	            console.log("애정도바는", affectionPercentage);
-    	        }
-    	    });
-    	};
 
 	 });
         
