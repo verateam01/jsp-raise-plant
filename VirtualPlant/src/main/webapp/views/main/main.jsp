@@ -11,12 +11,13 @@
     <script>Kakao.init('baf124810d0cd543bcd9dba2e0cf58f6');</script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
+    
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/main/main.css">
     <!-- Font-awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
     <style>
-.speech-bubble {
+#speech-bubble {
     position: relative;
 	padding: 10px 10px 10px 10px;
 	background: #FFFFFF;
@@ -32,7 +33,7 @@
     z-index: 1;
 }
 
-.speech-bubble:after {
+#speech-bubble:after {
     content: "";
   width: 0px;
   height: 0px;
@@ -44,7 +45,7 @@
   left: 24px;
   bottom: -13px; 
 }
-.speech-bubble:before{
+#speech-bubble:before{
 content: "";
   width: 0px;
   height: 0px;
@@ -56,7 +57,6 @@ content: "";
   left: 20px;
   bottom: -23px;
 }
-
     </style>
 </head>
 <body>
@@ -99,8 +99,9 @@ content: "";
             
         </div>
         <div id="plant_area" class="position-relative">
-        	<div class="speech-bubble">
-        		<div id="loading" style="display:none;">생각중...</div>
+        	<div id="speech-bubble">
+        		<span id="loading" style="display:none;">생각중...</span>
+        		<span class="think-answer"></span>
         	</div>
         	
             <div id="carouselExampleIndicators" class="carousel slide" data-bs-interval="false">
@@ -182,33 +183,36 @@ $(document).ready(function() {
     			affectionBarUpdate(response.affection);
     		})
     	}
-    	// 애정도
+    	
+    	/*
+    	* @count: 주기 횟수
+    	* @type: water, fertilized 
+    	*/
+    	const answerSpeech = (count,type) => {
+    		let message = "";
+    		if(count > 3 && type=="water")
+    			message = "너무 물이 많아요 ㅠㅠ 다음날주세요! 오늘 횟수:" + count;
+    		else if(count <= 3 && type=="water")
+    			message = "물을 주셔서 감사합니다! 하루3번인거 잊지않으셨죠?";
+    		else if(count > 2 && type=="fertilized")
+    			message = "영양분 과다 섭취 입니다 ㅠㅠ";
+    		else if(count <=2 && type=="fertilized")
+    			message = "쑥쑥 크겠습니다! 감사합니다";
+    		
+    		$('.think-answer').html(message);
+    		
+    		setTimeout(()=>{
+    			$('.think-answer').html('');
+    		},5000)
+    	}
+    	
+    	// 애정도바 업데이트
     	const affectionBarUpdate = (affection) => {
     		if (affection > 100){
     			affection = affection (affection % 100);
     		}
             $('#gauge-fill').css('width', affection + '%');
-            console.log("애정도바는", affection);
-            
-    	}
-    	/* 물주기 */
-    	const waterPlant = (plantId) => {
-    		let now = new Date();
-    		now.setHours(now.getHours()+9);
-    	    let formattedDateTime = now.toISOString().slice(0, 19).replace('T', ' ');
-    	    
-    		sendAjaxRequest('/api/plant/water','POST',{userId:userId, plantId:plantId,lastWaterd:formattedDateTime},(response)=>{
-    			console.log('waterPlant',response);
-    			affectionBarUpdate(response.affection);
-    			
-    		})
-    	}
-    	/* 비료주기 */
-    	const fertilizedPlant = (plantId) => {
-    		sendAjaxRequest('/api/plant/fertilized','POST',{userId:userId, plantId:plantId},(response)=>{
-    			console.log(response);
-    			fetchPlantData(currentPlantId);    			
-    		})
+            console.log("애정도수치", affection);
     	}
         
     	/*처음로딩시 PlantData*/
@@ -218,18 +222,39 @@ $(document).ready(function() {
         $('#carouselExampleIndicators').on('slid.bs.carousel',function(){
         	  let plantId = $(this).find('.carousel-item.active img').data('plant-id');
         	   fetchPlantData(plantId);
+        	   $('.think-answer').html('');
    	    });
-     	   
+        /* 물주기 */   
     	$('.water').click(()=>{
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
             waterPlant(currentPlantId);
     	})    
     	
+    	const waterPlant = (plantId) => {
+    		let now = new Date();
+    		now.setHours(now.getHours()+9);
+    	    let formattedDateTime = now.toISOString().slice(0, 19).replace('T', ' ');
+    	    
+    		sendAjaxRequest('/api/plant/water','POST',{userId:userId, plantId:plantId,lastWaterd:formattedDateTime},(response)=>{
+    			console.log('waterPlant',response);
+    			affectionBarUpdate(response.affection);
+				answerSpeech(response.waterCount,"water");    			
+    		})
+    	}
+    	/* 비료주기 */
     	$('.fertilized').click(()=>{
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
             fertilizedPlant(currentPlantId);
     	})
     	
+    	
+    	const fertilizedPlant = (plantId) => {
+    		sendAjaxRequest('/api/plant/fertilized','POST',{userId:userId, plantId:plantId},(response)=>{
+    			console.log(response);
+    			fetchPlantData(currentPlantId);    			
+    		})
+    	}
+    	/*단계업그레이드 로직*/
     	$('.next-stage').click(()=>{
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
             sendAjaxRequest('api/plant/levelup','POST',{userId:userId,plantId:currentPlantId},(response)=>{
@@ -246,10 +271,12 @@ $(document).ready(function() {
        	console.log(chatInput);
         // 식물 캐릭터의 성격과 말투를 반영하는 프롬프트
         let prompt = "간단하고 순수한 어휘 사용, 궁금한 것에 대한 무한한 호기심, 그리고 어린아이와 같은 단순하고 직관적인 사고 방식, 귀엽고 긍정적인 어휘를 사용해서 대답해줘. 너의 이름은 [식물이]이야. 이제 이 다음에 질문한것에대한 대답을해줘 " + chatInput;
+        $('.think-answer').html('');
 		$('#loading').show();
+		
         sendAjaxRequest('/api/gpt','GET',{prompt:prompt},(response)=>{
         	console.log(response);
-            $('.speech-bubble').html(response.answer);
+            $('.think-answer').html(response.answer);
             $('#loading').hide();
         },(error)=>{console.log(error)})
     }

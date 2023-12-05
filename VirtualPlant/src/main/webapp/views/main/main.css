@@ -19,10 +19,14 @@ body {
     /* 기본 패딩 제거 */
 }
 
+
+
 img {
     height: 80%;
     object-fit: cover;
 }
+
+
 
 #container {
     display: flex;
@@ -138,6 +142,8 @@ img {
     /* 버튼 사이 간격 */
     background-color: white;
 }
+
+
 
 #action_input {
     font-family: 'omyu_pretty';
