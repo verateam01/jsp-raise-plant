@@ -84,10 +84,10 @@ content: "";
         <div id="day_info">
             <div id="day_left"></div>
             <div id="day_text">
-                <p style="text-align: center; font-size: 40px;">4 Day</p>
+                <p class="plant_day" style="text-align: center; font-size: 40px;"></p>
             </div>
             <div id="day_skip_button">
-                <button id="next_day_button">다음날</button>
+                <button id="next_day_button" class="next-day">다음날</button>
             </div>
         </div>
         <div id="heart_content">
@@ -95,7 +95,8 @@ content: "";
                 <div id="gauge-fill"></div>
             </div>
 
-            <i class="fa-solid fa-heart fa-2xl" style="color: #ff7575;  margin: auto;"></i>
+            <i id="full_heart" class="fa-solid fa-heart fa-2xl" style="color: #ff7575;  margin: auto;"></i>
+            <i id="empty_heart" class="fa-regular fa-heart fa-2xl" style="color: #ff7575;  margin: auto;"></i>
             
         </div>
         <div id="plant_area" class="position-relative">
@@ -200,8 +201,16 @@ $(document).ready(function() {
     	
     	/*애정도바 길이조절 함수*/
     	const affectionBarUpdate = (affection) => {
- 		   if (affection > 100) {
-        		affection = 100;
+
+    		if (affection > 100){
+    			affection = 100;
+    			document.getElementById("empty_heart").style.display = 'none';
+    	        document.getElementById("full_heart").style.display = 'block';
+    		}
+    		else {
+    			affection = affection;
+    			document.getElementById("full_heart").style.display = 'none';
+    	        document.getElementById("empty_heart").style.display = 'block';
     		}
     		$('#gauge-fill').css('width', affection + '%');
 		}
@@ -227,10 +236,15 @@ $(document).ready(function() {
     	
     	/*식물데이터 얻어오는 함수*/
     	const fetchPlantData = (plantId) => {
-    		sendAjaxRequest('/api/plant/info','GET',{userId:userId,plantId:plantId},(response)=>{
-    			console.log(response);
-    			affectionBarUpdate(response.affection);
+
+    		sendAjaxRequest('/api/plant/info','GET',{userId:userId,plantId:plantId},(response)=>{    			
+    			console.log(response)
+    			affectionBarUpdate(response.affection);    			
     			changeImg(response.plantId,response.currStage);
+    			console.log("날짜잘받아오낭?"+ response.plantDay);
+    			let datData = response.plantDay;
+    			document.querySelector('.plant_day').innerText = datData + ' Day';
+  
     		},(error)=>{console.log(error)})
     	}
     	
@@ -243,6 +257,7 @@ $(document).ready(function() {
         	   changeImg(response.plantId,response.currStage);
         	   $('.think-answer').html('');
    	    });
+    	
         /* 물주기로직 */   
     	$('.water-button').click(()=>{
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
@@ -294,6 +309,20 @@ $(document).ready(function() {
             	changeImg(response.plantId,response.currStage);
             })
     	})
+    	
+    	/* 다음날 로직 */
+    	$('.next-day').click(() => {
+    	    let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
+    	    sendAjaxRequest('/api/plant/day', 'POST', {userId: userId, plantId: currentPlantId}, (response) => {
+    	        console.log(response.plantId, response.plantDay);
+    	        affectionBarUpdate(response.affection);
+    	        fetchPlantData(currentPlantId);
+                
+    	    });
+
+    	});
+
+    	
 	 });
      	
      	

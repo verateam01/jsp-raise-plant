@@ -56,6 +56,7 @@ public class plantinfo extends HttpServlet {
                     	System.out.println("물횟수: " + rs.getInt("water_count"));
                     	System.out.println("마지막으로 물 준시간: " + rs.getTimestamp("last_watered"));
                     	System.out.println("마지막으로 비료 준 시간: " + rs.getTimestamp("last_fertilized"));
+                    	System.out.println("현재날짜: " + rs.getInt("plant_Day"));
                     	
                     	
                     	Timestamp lastWateredTimestamp = rs.getTimestamp("last_watered");
@@ -71,6 +72,7 @@ public class plantinfo extends HttpServlet {
                         json.put("waterCount", rs.getInt("water_count"));
                         json.put("lastWatered", (lastWateredTimestamp != null) ? lastWateredTimestamp.toString() : JSONObject.NULL);
                         json.put("lastFertilized", (lastFertilizedTimestamp != null) ? lastFertilizedTimestamp.toString() : JSONObject.NULL);
+                        json.put("plantDay", rs.getInt("plant_Day"));
 
                         response.setContentType("application/json");
                         response.setCharacterEncoding("UTF-8");
