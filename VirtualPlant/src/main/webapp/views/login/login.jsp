@@ -45,8 +45,7 @@
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>
 	  Kakao.init('baf124810d0cd543bcd9dba2e0cf58f6');
-  console.log(Kakao.isInitialized());
-</script>
+  </script>
 <script>
     function kakaoLogin() {
         Kakao.Auth.login({

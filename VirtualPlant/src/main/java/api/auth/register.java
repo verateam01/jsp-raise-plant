@@ -31,7 +31,7 @@ public class register extends HttpServlet {
 		System.out.println(nick);
 		System.out.println(id);
 		System.out.println(pw);
-		String sql = "insert into users(id,pw,user_name,user_nick) values(?,?,?,?)";
+		String sql = "insert into users(id,pw,user_name,user_nick,user_type) values(?,?,?,?,?)";
 		String user_plants_sql = "insert into user_plants(user_id,plant_id) values(?,?)";
         String plants_sql = "insert into plants(user_plant_id, plant_name) values (?, ?);";
 		
@@ -44,6 +44,7 @@ public class register extends HttpServlet {
 			 pstmt.setString(2, pw);
 			 pstmt.setString(3, name);
 			 pstmt.setString(4, nick);
+			 pstmt.setString(5, "local");
 			 System.out.println("db데이터 넣기완료");
 			 int affectedRows = pstmt.executeUpdate();
 			 if (affectedRows > 0) {
@@ -51,11 +52,8 @@ public class register extends HttpServlet {
 				        if (userGeneratedKeys.next()) {
 				            int userId = userGeneratedKeys.getInt(1);			            
 				            String[] plants = {"Gardenia", "Hyacinth", "Cactus"};
-
-				            
 				                // 여기서 user_plants 테이블에 데이터를 삽입합니다.
 				            	 for(int i=1; i<=3; i++) {			            	
-						            	
 						                user_plants_pstmt.setInt(1, userId);
 						                user_plants_pstmt.setInt(2, i);
 						                user_plants_pstmt.executeUpdate();

@@ -11,7 +11,7 @@
     <script>Kakao.init('baf124810d0cd543bcd9dba2e0cf58f6');</script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
-    
+    <!-- Main CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/main/main.css">
     <!-- Font-awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -63,7 +63,10 @@ content: "";
 <%
         User user = (User)session.getAttribute("user");
         String kakaoUserName = (String)session.getAttribute("kakao_name");
+        
         String kakaoId = (String)session.getAttribute("kakao_id");
+        System.out.println("카카오유저"+kakaoUserName);
+        System.out.println("카카오유저"+kakaoId);
         String name;
         String id;
         if(user != null){
@@ -156,7 +159,7 @@ content: "";
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li><a class="dropdown-item" href="#">계정 설정</a></li>
                 <li><a class="dropdown-item" href="#">관리자 메뉴</a></li>
-                <li><a class="dropdown-item" href="#" onclick="logout('<%=kakaoUserName %>')">로그아웃</a></li>
+                <li><a class="dropdown-item logout-button" href="#">로그아웃</a></li>
             </ul>
         </div>
     </div> 
@@ -172,10 +175,38 @@ const sendAjaxRequest = (url, type, data, successCallback,errorCallback) => {
 	})
 }
 
+
 $(document).ready(function() {
     	let userId = "<%= id %>"
-    	let	firstPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
     	
+   		const kakaoLogout = () => {
+   		    if (Kakao.Auth.getAccessToken()) {
+   		        Kakao.Auth.logout(function(){
+   		            window.location.href="/login";
+   		            console.log('로그아웃완료');
+   		        })
+   		    }
+   		}
+		/*로그아웃*/
+   		const logout = () => {
+   		    let kakaoUser = "<%=kakaoId%>"
+   		    console.log(kakaoUser);
+   		    if(Kakao.Auth.getAccessToken() != null){
+   		        kakaoLogout();
+   		        console.log('로직실행');
+   		    }
+   		    else{
+   		        sendAjaxRequest('/api/logout','POST',{},(response)=>{
+   		            if(response.status == "success")
+   		                window.location.href='/login';
+   		        },(error)=>{
+   		            console.log(error)
+   		        })
+   		    }
+   		}
+		$('.logout-button').click(logout);
+		
+    	let	firstPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
     	/*
     	* @count: 주기 횟수
     	* @type: water, fertilized 

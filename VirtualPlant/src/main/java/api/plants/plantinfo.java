@@ -33,7 +33,7 @@ public class plantinfo extends HttpServlet {
         String plantId = request.getParameter("plantId");
         String findId = "select * from users where id=?";
         String findPlantInfoSql = "select * from user_plants where user_id=? and plant_id=?;";
-
+        
         try (Connection conn = DBConn.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(findId)) {
 
