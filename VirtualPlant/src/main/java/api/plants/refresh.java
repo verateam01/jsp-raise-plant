@@ -58,6 +58,7 @@ public class refresh extends HttpServlet {
                             ResultSet rs = psResult.executeQuery();
                             if(rs.next()) {
                                 JSONObject json = new JSONObject();
+                                json.put("plantId",rs.getInt("plant_id"));
                                 json.put("currStage", rs.getInt("curr_stage"));
                                 json.put("affection", rs.getInt("affection"));
                                 

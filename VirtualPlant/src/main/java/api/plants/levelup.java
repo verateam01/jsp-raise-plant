@@ -68,8 +68,10 @@ public class levelup extends HttpServlet {
 							                int updatedCurrStage = updatedRs.getInt("curr_stage");
 							                int updatedAffection = updatedRs.getInt("affection");
 							                JSONObject json = new JSONObject();
+							                json.put("plantId", updatedRs.getInt("plant_id"));
 							                json.put("currStage", updatedCurrStage);
 							                json.put("affection", updatedAffection);
+							                
 							                
 							                response.setContentType("application/json");
 							                response.setCharacterEncoding("UTF-8");

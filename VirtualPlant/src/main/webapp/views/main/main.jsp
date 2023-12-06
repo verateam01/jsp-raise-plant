@@ -113,13 +113,13 @@ content: "";
                 <div class="carousel-inner ">
                 	
                     <div class="carousel-item active">
-                        <img src="../../img/plant_img/Gardenia1.jpg" class="d-block" alt="..." data-plant-id="1">
+                        <img src="" class="img1 d-block" alt="..." data-plant-id="1">
                     </div>
                     <div class="carousel-item">
-                        <img src="../../img/plant_img/Hyacinth1.jpg" class="d-block" alt="..." data-plant-id="2">
+                        <img src="" class="img2 d-block" alt="..." data-plant-id="2">
                     </div>
                     <div class="carousel-item">
-                        <img src="../../img/plant_img/Cactus1.jpg" class="d-block" alt="..." data-plant-id="3">
+                        <img src="" class="img3 d-block" alt="..." data-plant-id="3">
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -206,11 +206,34 @@ $(document).ready(function() {
             $('#gauge-fill').css('width', affection + '%');
             console.log("애정도수치:", affection);
     	}
+    	
+    	/*사진변경코드*/
+    	/*
+    	*@todo 캐러셀변경시 사진없음 이미지 삭제, currStage4단계까지 확장 
+    	*/
+    	const changeImg = (plantId,currStage) => {
+    		if(plantId == 1){
+    			let imgSrc = '../../img/plant_img/Gardenia' + currStage + '.jpg';
+    	        $('#carouselExampleIndicators .carousel-item.active img').attr('src', imgSrc);
+    		}
+    		if(plantId == 2){
+    			let imgSrc = '../../img/plant_img/Hyacinth' + currStage + '.jpg';
+    	        $('#carouselExampleIndicators .carousel-item.active img').attr('src', imgSrc);
+    		}
+    		if(plantId == 3){
+    			let imgSrc = '../../img/plant_img/Cactus' + currStage + '.jpg';
+    	        $('#carouselExampleIndicators .carousel-item.active img').attr('src', imgSrc);
+    		}
+    	}
+    	
     	/*식물데이터 얻어오는 함수*/
     	const fetchPlantData = (plantId) => {
     		sendAjaxRequest('/api/plant/info','GET',{userId:userId,plantId:plantId},(response)=>{
     			console.log(response);
     			affectionBarUpdate(response.affection);
+    			
+    			changeImg(response.plantId,response.currStage);
+    			
     		},(error)=>{console.log(error)})
     	}
     	
@@ -220,6 +243,7 @@ $(document).ready(function() {
         $('#carouselExampleIndicators').on('slid.bs.carousel',function(){
         	  let plantId = $(this).find('.carousel-item.active img').data('plant-id');
         	   fetchPlantData(plantId);
+        	   changeImg(response.plantId,response.currStage);
         	   $('.think-answer').html('');
    	    });
         /* 물주기로직 */   
@@ -227,7 +251,7 @@ $(document).ready(function() {
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
             let now = new Date();
     		now.setHours(now.getHours()+9);
-    	    let formattedDateTime = now.toISOString().slice(0, 19).replace('T', ' ');
+    	    let formattedDateTime = now.toISOString().slice(0, 19).replace('T', ' '); //한국시간변
     	    
     		sendAjaxRequest('/api/plant/water','POST',{userId:userId, plantId:currentPlantId,lastWaterd:formattedDateTime},(response)=>{
     			console.log('waterPlant',response);
@@ -241,7 +265,8 @@ $(document).ready(function() {
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
             sendAjaxRequest('/api/plant/fertilized','POST',{userId:userId, plantId:plantId},(response)=>{
     			console.log(response);
-    			fetchPlantData(currentPlantId);    			
+    			fetchPlantData(currentPlantId);
+    			answerSpeech(response.fertilizedCount,"fertilized");  
     		})
     	})
     	
@@ -252,6 +277,7 @@ $(document).ready(function() {
     		sendAjaxRequest('/api/plant/refresh','POST',{userId:userId,plantId:currentPlantId},(response)=>{
     			console.log(response);
     			affectionBarUpdate(response.affection);
+    			changeImg(response.plantId,response.currStage);
     		})
     	})
     	
@@ -261,7 +287,9 @@ $(document).ready(function() {
     	$('.next-stage').click(()=>{
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
             sendAjaxRequest('api/plant/levelup','POST',{userId:userId,plantId:currentPlantId},(response)=>{
+            	console.log(response.plantId,response.currStage);
             	affectionBarUpdate(response.affection);
+            	changeImg(response.plantId,response.currStage);
             })
     	})
 	 });
