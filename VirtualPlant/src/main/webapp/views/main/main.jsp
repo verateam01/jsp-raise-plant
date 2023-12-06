@@ -77,9 +77,7 @@ content: "";
             return;
         }
 
-    %>
-              
-    
+    %>            
     <div id="container">
         <div id="day_info">
             <div id="day_left"></div>
@@ -95,8 +93,9 @@ content: "";
                 <div id="gauge-fill"></div>
             </div>
 
-            <i id="full_heart" class="fa-solid fa-heart fa-2xl" style="color: #ff7575;  margin: auto;"></i>
-            <i id="empty_heart" class="fa-regular fa-heart fa-2xl" style="color: #ff7575;  margin: auto;"></i>
+            <i id="full_heart" class="fa-solid fa-heart fa-2xl" style="color: #ff7575; margin: auto;"></i>
+            <i id="empty_heart" class="fa-regular fa-heart fa-2xl" style="color: #ff7575; margin: auto;"></i>
+            <i id="skull" class="fa-solid fa-skull-crossbones fa-2xl" style="color: #463331; margin: auto;"></i>
             
         </div>
         <div id="plant_area" class="position-relative">
@@ -133,13 +132,13 @@ content: "";
                 </button>
             </div>
             <div class="position-absolute top-100 start-50 translate-middle">
-	            <button class="next-stage btn btn-outline-danger">Level Up!</button>
+	            <button id="next-stage" class="next-stage btn btn-outline-danger">Level Up!</button>
             </div>
         </div>
         <div id="action_area">
             <div class="buttons_container">
-                <button class="water-button action_button">물주기</button>
-                <button class="fertilized-button action_button">비료주기</button>
+                <button id="water-button" class="water-button action_button">물주기</button>
+                <button id="fertilized-button" class="fertilized-button action_button">비료주기</button>
                 <button class="refresh-button btn btn-outline-primary action_button">Refresh</button>
             </div>
             <div class="input_container">
@@ -199,21 +198,46 @@ $(document).ready(function() {
     		},5000)
     	}
     	
-    	/*애정도바 길이조절 함수*/
+    	/*애정도에 따른 애정도바, 아이콘, 버튼 함수*/
     	const affectionBarUpdate = (affection) => {
+    // 버튼 요소들을 가져옵니다
+    const waterButton = document.getElementById("water-button");
+    const fertilizedButton = document.getElementById("fertilized-button");
+    const nextStageButton = document.getElementById("next-stage");
+    const nextdayButton = document.getElementById("next_day_button");
 
-    		if (affection > 100){
-    			affection = 100;
-    			document.getElementById("empty_heart").style.display = 'none';
-    	        document.getElementById("full_heart").style.display = 'block';
-    		}
-    		else {
-    			affection = affection;
-    			document.getElementById("full_heart").style.display = 'none';
-    	        document.getElementById("empty_heart").style.display = 'block';
-    		}
-    		$('#gauge-fill').css('width', affection + '%');
-		}
+    if (affection > 100){
+        affection = 100;
+        document.getElementById("empty_heart").style.display = 'none';
+        document.getElementById("skull").style.display = 'none';
+        document.getElementById("full_heart").style.display = 'block';
+    }
+    else if (affection < 0) {
+        document.getElementById("full_heart").style.display = 'none';               
+        document.getElementById("empty_heart").style.display = 'none';
+        document.getElementById("skull").style.display = 'block';
+
+        // 애정도가 음수일 때 버튼들을 숨깁니다.
+        waterButton.style.display = 'none';
+        fertilizedButton.style.display = 'none';
+        nextStageButton.style.display = 'none';
+        nextdayButton.style.display = 'none';
+    }
+    else {
+        affection = affection;
+        document.getElementById("full_heart").style.display = 'none';
+        document.getElementById("skull").style.display = 'none';
+        document.getElementById("empty_heart").style.display = 'block';
+
+        // 애정도가 음수가 아닐 때 버튼들을 보이게 합니다.
+        waterButton.style.display = 'block';
+        fertilizedButton.style.display = 'block';
+        nextStageButton.style.display = 'block';
+        nextdayButton.style.display = 'block';
+    }
+    $('#gauge-fill').css('width', affection + '%');
+}
+
     	
     	/*사진변경코드*/
     	/*
@@ -233,7 +257,23 @@ $(document).ready(function() {
     	        $('#carouselExampleIndicators .carousel-item.active img').attr('src', imgSrc);
     		}
     	}
-    	
+
+        
+        /* 식물 죽는 로직 */
+        const witherPlant = (plantId) => {
+    				sendAjaxRequest('/api/plant/wither','POST',{userId:userId,plantId:plantId},(response)=>{  	    	
+    	    			changeImg(response.plantId,response.currStage);
+    				},(error)=>{console.log(error)})
+    				$('#gauge-fill').css({
+    				    'width': '100%',
+    				    'background-color': '#463331'
+    				});
+    				$('empty_heart').css({
+    					'color': '#463331'
+    				});
+
+        }			
+                
     	/*식물데이터 얻어오는 함수*/
     	const fetchPlantData = (plantId) => {
 
@@ -241,11 +281,18 @@ $(document).ready(function() {
     			console.log(response)
     			affectionBarUpdate(response.affection);    			
     			changeImg(response.plantId,response.currStage);
+    			
+    			// 날짜 변경 로직
     			console.log("날짜잘받아오낭?"+ response.plantDay);
     			let datData = response.plantDay;
-    			document.querySelector('.plant_day').innerText = datData + ' Day';
-  
+    			document.querySelector('.plant_day').innerText = datData + ' Day';  
+    			if (response.affection < 0){
+    				witherPlant(plantId);
+    			}
+    			
+    			   			
     		},(error)=>{console.log(error)})
+
     	}
     	
        	fetchPlantData(firstPlantId);
@@ -268,7 +315,10 @@ $(document).ready(function() {
     		sendAjaxRequest('/api/plant/water','POST',{userId:userId, plantId:currentPlantId,lastWaterd:formattedDateTime},(response)=>{
     			console.log('waterPlant',response);
     			affectionBarUpdate(response.affection);
-				answerSpeech(response.waterCount,"water");    			
+				answerSpeech(response.waterCount,"water");   
+				if (response.affection < 0){
+    				witherPlant(currentPlantId);
+    			}
     		})
     	})    
     	
@@ -283,6 +333,9 @@ $(document).ready(function() {
     			console.log(response);
     			affectionBarUpdate(response.affection);
     			answerSpeech(response.fertilizerCount,"fertilizer");  
+    			if (response.affection < 0){
+    				witherPlant(currentPlantId);
+    			}
     		})
     	})
     	
@@ -295,7 +348,12 @@ $(document).ready(function() {
     			console.log(response);
     			affectionBarUpdate(response.affection);
     			changeImg(response.plantId,response.currStage);
+    			fetchPlantData(currentPlantId);
+    			// witherPlant(plantId);
     		})
+    		$('#gauge-fill').css({
+			    'background-color': '#f97178'
+			});
     	})
     	
     
@@ -310,7 +368,7 @@ $(document).ready(function() {
             })
     	})
     	
-    	/* 다음날 로직 */
+    	/* 다음날 버튼 로직 */
     	$('.next-day').click(() => {
     	    let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
     	    sendAjaxRequest('/api/plant/day', 'POST', {userId: userId, plantId: currentPlantId}, (response) => {
@@ -321,7 +379,6 @@ $(document).ready(function() {
     	    });
 
     	});
-
     	
 	 });
      	
