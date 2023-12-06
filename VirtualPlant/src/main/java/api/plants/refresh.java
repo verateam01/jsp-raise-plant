@@ -30,7 +30,7 @@ public class refresh extends HttpServlet {
         String plantId = request.getParameter("plantId");
         
         String findUserId = "SELECT user_id FROM users WHERE id = ?";
-        String clearPlantInfo = "UPDATE user_plants SET curr_stage = ?, affection = ?, water_count = ?, fertilizer_count = ?, last_watered = ?, last_fertilized = ? WHERE user_id = ? AND plant_id = ?";
+        String clearPlantInfo = "UPDATE user_plants SET curr_stage = ?, affection = ?, water_count = ?, fertilizer_count = ?, last_watered = ?, last_fertilized = ?, plant_day = ? WHERE user_id = ? AND plant_id = ?";
         String resultPlantInfo = "SELECT * FROM user_plants WHERE user_id = ? AND plant_id = ?";
 
         try (Connection conn = DBConn.getConnection();
@@ -47,8 +47,9 @@ public class refresh extends HttpServlet {
                     psClear.setInt(4, 0);
                     psClear.setNull(5, java.sql.Types.TIMESTAMP);
                     psClear.setNull(6, java.sql.Types.TIMESTAMP);
-                    psClear.setString(7, user_id);
-                    psClear.setString(8, plantId);
+                    psClear.setInt(7, 1);
+                    psClear.setString(8, user_id);
+                    psClear.setString(9, plantId);
                     
                     int updateRows = psClear.executeUpdate();
                     if(updateRows > 0) {
@@ -61,6 +62,7 @@ public class refresh extends HttpServlet {
                                 json.put("plantId",rs.getInt("plant_id"));
                                 json.put("currStage", rs.getInt("curr_stage"));
                                 json.put("affection", rs.getInt("affection"));
+                                json.put("day", rs.getInt("plant_day"));
                                 
                                 response.setContentType("application/json");
                                 response.setCharacterEncoding("UTF-8");
