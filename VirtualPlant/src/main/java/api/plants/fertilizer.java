@@ -7,31 +7,36 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 
 import db.util.DBConn;
 
-@WebServlet("/api/plant/water")
-public class water extends HttpServlet {
+@WebServlet("/api/plant/fertilizer")
+public class fertilizer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
+    
+    public fertilizer() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String userId=request.getParameter("userId");
 		String plantId=request.getParameter("plantId");
-		String lastWatered=request.getParameter("lastWaterd");
-		
+		String lastFertilizedTime=request.getParameter("lastFertilizedTime");
+		System.out.println(lastFertilizedTime);
 		String findUserId = "select * from users where id=?;";
-		String checkWaterCountSql = "SELECT water_count, last_watered FROM user_plants WHERE user_id = ? AND plant_id = ?;";
-		String updateWaterSql = "UPDATE user_plants SET last_watered = ?, water_count = ?, affection = affection + ? WHERE user_id = ? AND plant_id = ?;";
-		String updateLastWaterTimeSql="UPDATE user_plants SET last_watered = ? WHERE user_id = ? AND plant_id = ?;";
+		String checkFertilizerCountSql = "SELECT fertilizer_count, last_fertilized FROM user_plants WHERE user_id = ? AND plant_id = ?;";
+		String updateFertilizerSql = "UPDATE user_plants SET last_fertilized = ?, fertilizer_count = ?, affection = affection + ? WHERE user_id = ? AND plant_id = ?;";
+		String updateLastFertilizedTimeSql="UPDATE user_plants SET last_fertilized = ? WHERE user_id = ? AND plant_id = ?;";
 		String resultSql="select * from user_plants where user_id=? and plant_id=?";
 		
 		try (Connection conn=DBConn.getConnection();
@@ -44,40 +49,40 @@ public class water extends HttpServlet {
 				String user_id=rs.getString("user_id");
 				
 				//water_count, last_waterd값 찾기
-				try(PreparedStatement checkWaterCountPstmt=conn.prepareStatement(checkWaterCountSql)){
-					checkWaterCountPstmt.setString(1, user_id);
-					checkWaterCountPstmt.setString(2, plantId);
-					ResultSet rsWaterCount=checkWaterCountPstmt.executeQuery();
+				try(PreparedStatement checkFertilizerCountPstmt=conn.prepareStatement(checkFertilizerCountSql)){
+					checkFertilizerCountPstmt.setString(1, user_id);
+					checkFertilizerCountPstmt.setString(2, plantId);
+					ResultSet rsFertilizerCount=checkFertilizerCountPstmt.executeQuery();
 					
-					if(rsWaterCount.next()) {
+					if(rsFertilizerCount.next()) {
 						
-						int waterCount = rsWaterCount.getInt("water_count");
-						Timestamp lastWateredTimestamp = rsWaterCount.getTimestamp("last_watered");
+						int fertilizerCount = rsFertilizerCount.getInt("fertilizer_count");
+						Timestamp lastFertilizedTimes = rsFertilizerCount.getTimestamp("last_fertilized");
 						//last_water시간이 null일경우 시간넣기
-						if(lastWateredTimestamp == null) {
-							try(PreparedStatement updateLastWaterTime=conn.prepareStatement(updateLastWaterTimeSql)){
-								updateLastWaterTime.setString(1, lastWatered);
-								updateLastWaterTime.setString(2, user_id);
-								updateLastWaterTime.setString(3, plantId);
-								updateLastWaterTime.executeUpdate();
+						if(lastFertilizedTimes == null) {
+							try(PreparedStatement updateLastFertilizedTime=conn.prepareStatement(updateLastFertilizedTimeSql)){
+								updateLastFertilizedTime.setString(1, lastFertilizedTime);
+								updateLastFertilizedTime.setString(2, user_id);
+								updateLastFertilizedTime.setString(3, plantId);
+								updateLastFertilizedTime.executeUpdate();
 							}
 						}
 						
 						//시간이 null일경우도 그냥 지금시간넣고해주기위한로직
-						LocalDate lastWateredDate = (lastWateredTimestamp != null) ? lastWateredTimestamp.toLocalDateTime().toLocalDate() : LocalDate.now();
+						LocalDate lastFertilizedDate = (lastFertilizedTimes != null) ? lastFertilizedTimes.toLocalDateTime().toLocalDate() : LocalDate.now();
 						LocalDate currentDate = LocalDate.now();
 						
-						if (!lastWateredDate.equals(currentDate)) {
-                            waterCount = 0; // 날짜가 변경되었으므로 waterCount 리셋
+						if (!lastFertilizedDate.equals(currentDate)) {
+                            fertilizerCount = 0; // 날짜가 변경되었으므로 fertilizerCount 리셋
                         }
 						
 						//-20: 10으로  애정도 우선설정
-						int affectionChange = (waterCount >= 3) ? -10:20;
-						waterCount++;
+						int affectionChange = (fertilizerCount >= 2) ? -10:30;
+						fertilizerCount++;
 						
-						try (PreparedStatement updateWaterPstmt=conn.prepareStatement(updateWaterSql)){
-							updateWaterPstmt.setString(1, lastWatered);
-							updateWaterPstmt.setInt(2, waterCount);
+						try (PreparedStatement updateWaterPstmt=conn.prepareStatement(updateFertilizerSql)){
+							updateWaterPstmt.setString(1, lastFertilizedTime);
+							updateWaterPstmt.setInt(2, fertilizerCount);
 							updateWaterPstmt.setInt(3, affectionChange);
 							updateWaterPstmt.setString(4, user_id);
 							updateWaterPstmt.setString(5, plantId);
@@ -121,7 +126,6 @@ public class water extends HttpServlet {
 			// TODO: handle exception
 				e.printStackTrace();
 		}
-		
 	}
 
 }

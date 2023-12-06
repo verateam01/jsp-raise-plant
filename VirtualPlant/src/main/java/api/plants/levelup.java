@@ -48,7 +48,7 @@ public class levelup extends HttpServlet {
 						int affection = rsPlantInfo.getInt("affection");
 						
 						//affection이 200이 넘으면두번진화할수있음 한단계씩
-						if(currStage < 3 && affection >= 100) {
+						if(currStage < 4 && affection >= 100) {
 							affection = affection - 100;
 							currStage = currStage + 1;
 							
@@ -81,8 +81,6 @@ public class levelup extends HttpServlet {
 								}
 							}
 						}
-						
-							
 					}
 				}
 			}

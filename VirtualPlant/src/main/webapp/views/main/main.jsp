@@ -186,9 +186,9 @@ $(document).ready(function() {
     			message = "너무 물이 많아요 ㅠㅠ 다음날주세요! 오늘 횟수:" + count;
     		else if(count <= 3 && type=="water")
     			message = "물을 주셔서 감사합니다! 하루3번인거 잊지않으셨죠?";
-    		else if(count > 2 && type=="fertilized")
+    		else if(count > 2 && type=="fertilizer")
     			message = "영양분 과다 섭취 입니다 ㅠㅠ";
-    		else if(count <=2 && type=="fertilized")
+    		else if(count <=2 && type=="fertilizer")
     			message = "쑥쑥 크겠습니다! 감사합니다";
     		
     		$('.think-answer').html(message);
@@ -200,16 +200,15 @@ $(document).ready(function() {
     	
     	/*애정도바 길이조절 함수*/
     	const affectionBarUpdate = (affection) => {
-    		if (affection > 100){
-    			affection = affection (affection % 100);
+ 		   if (affection > 100) {
+        		affection = 100;
     		}
-            $('#gauge-fill').css('width', affection + '%');
-            console.log("애정도수치:", affection);
-    	}
+    		$('#gauge-fill').css('width', affection + '%');
+		}
     	
     	/*사진변경코드*/
     	/*
-    	*@todo 캐러셀변경시 사진없음 이미지 삭제, currStage4단계까지 확장 
+    	*@todo 캐러셀변경시 사진없음 이미지 삭제, currStage4단계까지 확장 , 사진잘림문제해결필요
     	*/
     	const changeImg = (plantId,currStage) => {
     		if(plantId == 1){
@@ -231,9 +230,7 @@ $(document).ready(function() {
     		sendAjaxRequest('/api/plant/info','GET',{userId:userId,plantId:plantId},(response)=>{
     			console.log(response);
     			affectionBarUpdate(response.affection);
-    			
     			changeImg(response.plantId,response.currStage);
-    			
     		},(error)=>{console.log(error)})
     	}
     	
@@ -263,15 +260,20 @@ $(document).ready(function() {
     	/* 비료주기 로직*/
     	$('.fertilized-button').click(()=>{
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
-            sendAjaxRequest('/api/plant/fertilized','POST',{userId:userId, plantId:plantId},(response)=>{
+    		let now = new Date();
+    		now.setHours(now.getHours()+9);
+    	    let formattedDateTime = now.toISOString().slice(0, 19).replace('T', ' '); //한국시간변
+    	    
+            sendAjaxRequest('/api/plant/fertilizer','POST',{userId:userId, plantId:currentPlantId,lastFertilizedTime:formattedDateTime},(response)=>{
     			console.log(response);
-    			fetchPlantData(currentPlantId);
-    			answerSpeech(response.fertilizedCount,"fertilized");  
+    			affectionBarUpdate(response.affection);
+    			answerSpeech(response.fertilizerCount,"fertilizer");  
     		})
     	})
     	
     	/*리프레시 버튼 로직*/
     	$('.refresh-button').click(()=>{
+    		
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
     		
     		sendAjaxRequest('/api/plant/refresh','POST',{userId:userId,plantId:currentPlantId},(response)=>{
@@ -303,7 +305,6 @@ $(document).ready(function() {
         
         $('.think-answer').html('');
 		$('#loading').show();
-		
         sendAjaxRequest('/api/gpt','GET',{prompt:prompt},(response)=>{
         	console.log(response);
             $('.think-answer').html(response.answer);
