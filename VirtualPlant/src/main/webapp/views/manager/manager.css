@@ -12,22 +12,99 @@ body {
     font-family: 'omyu_pretty';
     font-size: larger;
     height: 100%;
-    /* 화면 전체 높이로 설정 */
     margin: 0;
-    /* 기본 마진 제거 */
     padding: 0;
-    /* 기본 패딩 제거 */
 }
 
 #container {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    align-items: stretch;
+    flex-direction: row;
     height: 100%;
-    /* 화면 전체 높이로 설정 */
-    width: 1024px;
-    margin: 0 auto;
-    /* 상하 마진을 0으로 설정 */
 }
+
+/* 사이드 메뉴 div */
+#side_menu_area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(133, 133, 133);
+    color: white;
+}
+
+#menu_top {
+    flex: 1;
+    display: flex;  
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    padding-left: 10px;
+    text-align: center;
+}
+
+#menu_mid {
+    flex: 5;
+    display: flex;  
+    flex-direction: column;
+    align-items: center; 
+    padding-top: 20px;
+    
+}
+
+#menu_bottom {
+    flex: 1;
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+}
+
+/* 요소 스타일링 */
+.menu_button {
+	
+}
+
+
+/* 메인 콘텐츠 div */
+#content_area {
+    flex: 6;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    width: 100%;
+}
+
+#content_top {
+    flex: 1;
+    display: flex;  
+    justify-content: flex-start;
+    align-items: center;  
+    padding-left: 40px;
+}
+
+#content_mid {
+    flex: 6;
+    display: flex;  
+    justify-content: center;  
+    align-items: center; 
+    width: 100%; 
+}
+
+/* 메인 콘텐츠 */
+table {
+	width: 80%;
+	border: 1px solid rgb(133, 133, 133);
+}
+
+th {
+	text-align: center;
+	border: 1px solid rgb(133, 133, 133);
+}
+tr {
+	text-align: center;
+	border: 1px solid rgb(133, 133, 133);
+}
+
+td {
+	text-align: center;
+	border: 1px solid rgb(133, 133, 133);
+}
+

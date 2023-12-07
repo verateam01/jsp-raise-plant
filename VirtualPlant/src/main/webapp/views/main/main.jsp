@@ -104,6 +104,39 @@ content: "";
         		<span class="think-answer"></span>
         	</div>
         	
+        	<div id="guide_modal">
+        	<!-- Button trigger modal -->
+		<button type="button" id="modal_button" class="btn btn-secondary" data-bs-toggle="modal"
+			data-bs-target="#exampleModal" style="border-radius: 20px;">
+			<i class="fa-solid fa-question fa-xl"></i>
+		</button>
+
+		<!-- Modal -->
+		<div class="modal fade" id="exampleModal" tabindex="-1"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="exampleModalLabel">Modal
+							title</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						도움말
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-bs-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save
+							changes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+        	</div>
+        	
             <div id="carouselExampleIndicators" class="carousel slide" data-bs-interval="false">
                 <div class="carousel-indicators">
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -261,20 +294,32 @@ $(document).ready(function() {
     	/*
     	*@todo 캐러셀변경시 사진없음 이미지 삭제, currStage4단계까지 확장 , 사진잘림문제해결필요
     	*/
-    	const changeImg = (plantId,currStage) => {
-    		if(plantId == 1){
-    			let imgSrc = '../../img/plant_img/Gardenia' + currStage + '.jpg';
-    	        $('#carouselExampleIndicators .carousel-item.active img').attr('src', imgSrc);
-    		}
-    		if(plantId == 2){
-    			let imgSrc = '../../img/plant_img/Hyacinth' + currStage + '.jpg';
-    	        $('#carouselExampleIndicators .carousel-item.active img').attr('src', imgSrc);
-    		}
-    		if(plantId == 3){
-    			let imgSrc = '../../img/plant_img/Cactus' + currStage + '.jpg';
-    	        $('#carouselExampleIndicators .carousel-item.active img').attr('src', imgSrc);
-    		}
-    	}
+    	const changeImg = (plantId, currStage) => {
+    	    let imgSrc, jspFile;
+
+    	    if (plantId == 1) {
+    	        imgSrc = '../../img/plant_img/Gardenia' + currStage + '.jpg';
+    	        jspFile = '/gardenia';
+    	    } else if (plantId == 2) {
+    	        imgSrc = '../../img/plant_img/Hyacinth' + currStage + '.jpg';
+    	        jspFile = '/hyacinth'; 
+    	    } else if (plantId == 3) {
+    	        imgSrc = '../../img/plant_img/Cactus' + currStage + '.jpg';
+    	        jspFile = '/cactus';
+    	    }
+
+    	    // 이미지 소스 변경
+    	    $('#carouselExampleIndicators .carousel-item.active img').attr('src', imgSrc);
+
+    	    // JSP 파일 불러오기
+    	    if (jspFile) {
+    	        $.get(jspFile, function(data) {
+    	            $('.modal-body').html(data);
+    	        });
+    	    }
+    	};
+
+
 
         
         /* 식물 죽는 로직 */
