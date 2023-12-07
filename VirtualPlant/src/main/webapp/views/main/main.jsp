@@ -235,7 +235,7 @@ $(document).ready(function() {
 		    const nextStageButton = document.getElementById("next-stage");
 		    const nextdayButton = document.getElementById("next_day_button");
 		
-		    if (affection > 100){
+		    if (affection >= 100){
 		        affection = 100;
 		        document.getElementById("empty_heart").style.display = 'none';
 		        document.getElementById("skull").style.display = 'none';
@@ -283,6 +283,7 @@ $(document).ready(function() {
     		}
     			
     	}
+
     	
     	/*사진변경코드*/
     	/*
@@ -308,16 +309,14 @@ $(document).ready(function() {
         const witherPlant = (plantId) => {
     				sendAjaxRequest('/api/plant/wither','POST',{userId:userId,plantId:plantId},(response)=>{  	    	
     	    			changeImg(response.plantId,response.currStage);
+    	    			$('#gauge-fill').css({
+        				    'width': '100%',
+        				    'background-color': '#463331'
+        				});
+        				$('empty_heart').css({
+        					'color': '#463331'
+        				});
     				},(error)=>{console.log(error)})
-    				
-    				$('#gauge-fill').css({
-    				    'width': '100%',
-    				    'background-color': '#463331'
-    				});
-    				$('empty_heart').css({
-    					'color': '#463331'
-    				});
-
         }			
                 
     	/*식물데이터 얻어오는 함수*/
