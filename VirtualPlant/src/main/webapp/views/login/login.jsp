@@ -16,6 +16,24 @@
 	.kakaoButton{
 		cursor:pointer
 	}
+	.line {
+        display: flex;
+        flex-basis: 100%;
+        align-items: center;
+        color: rgba(0, 0, 0, 0.35);
+        font-size: 20px;
+        margin: 8px 0px;
+      }
+      .line::before,
+      .line::after {
+        content: "";
+        flex-grow: 1;
+        background: rgba(0, 0, 0, 0.35);
+        height: 1px;
+        font-size: 0px;
+        line-height: 0px;
+        margin: 0px 16px;
+      }
 </style>
 </head>
 <body>
@@ -28,19 +46,18 @@
 	<div class="d-flex justify-content-end mt-3">
 		<button id="loginButton" class="btn btn-primary" style="width: 90px; background-color: #f97178; border:none;">로그인</button>
 	</div>
-	<div class="d-flex flex-column align-middle">
-		<p>소셜로그인</p>
-		<span onclick="kakaoLogin();">
-      <a href="javascript:void(0)">
-					<img class="kakaoButton" style="width:185px; hegiht:45px;" src="../../img/kakao_loginButton.png" alt="카카오로그인버튼"/>
-      </a>
-		</span>
+	<div class="d-flex flex-column align-item-middle">
+		<div class="line">
+			소셜로그인
+		</div>
+		<div class="kakao" onclick="kakaoLogin();">
+      		<a href="javascript:void(0)">
+				<img class="kakaoButton" style="width:185px; hegiht:45px;" src="../../img/kakao_loginButton.png" alt="카카오로그인버튼"/>
+      		</a>
+		</div>
 	</div>
 </div>
-<form mehtod="">
 
-
-</form>
 <!--카카오로그인-->
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>
