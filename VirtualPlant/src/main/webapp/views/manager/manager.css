@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'omyu_pretty';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html,
+body {
+    font-family: 'omyu_pretty';
+    font-size: larger;
+    height: 100%;
+    /* 화면 전체 높이로 설정 */
+    margin: 0;
+    /* 기본 마진 제거 */
+    padding: 0;
+    /* 기본 패딩 제거 */
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    align-items: stretch;
+    height: 100%;
+    /* 화면 전체 높이로 설정 */
+    width: 1024px;
+    margin: 0 auto;
+    /* 상하 마진을 0으로 설정 */
+}
