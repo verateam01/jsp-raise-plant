@@ -206,11 +206,15 @@ $(document).ready(function() {
     const nextStageButton = document.getElementById("next-stage");
     const nextdayButton = document.getElementById("next_day_button");
 
-    if (affection > 100){
+    if (affection >= 100){
         affection = 100;
         document.getElementById("empty_heart").style.display = 'none';
         document.getElementById("skull").style.display = 'none';
         document.getElementById("full_heart").style.display = 'block';
+        $('#gauge-fill').css({
+		    'background-color': '#f97178'
+		});
+        $('#gauge-fill').css('width', affection + '%');
     }
     else if (affection < 0) {
         document.getElementById("full_heart").style.display = 'none';               
@@ -222,6 +226,15 @@ $(document).ready(function() {
         fertilizedButton.style.display = 'none';
         nextStageButton.style.display = 'none';
         nextdayButton.style.display = 'none';
+
+    	console.log("애정도테스트~" + affection)
+        $('#gauge-fill').css({
+		    'width': '100%',
+		    'background-color': '#463331'
+		});
+		$('empty_heart').css({
+			'color': '#463331'
+		});
     }
     else {
         affection = affection;
@@ -234,8 +247,13 @@ $(document).ready(function() {
         fertilizedButton.style.display = 'block';
         nextStageButton.style.display = 'block';
         nextdayButton.style.display = 'block';
+        $('#gauge-fill').css({
+		    'background-color': '#f97178'
+		});
+        $('#gauge-fill').css('width', affection + '%');
     }
-    $('#gauge-fill').css('width', affection + '%');
+    
+    
 }
 
     	
@@ -263,14 +281,7 @@ $(document).ready(function() {
         const witherPlant = (plantId) => {
     				sendAjaxRequest('/api/plant/wither','POST',{userId:userId,plantId:plantId},(response)=>{  	    	
     	    			changeImg(response.plantId,response.currStage);
-    				},(error)=>{console.log(error)})
-    				$('#gauge-fill').css({
-    				    'width': '100%',
-    				    'background-color': '#463331'
-    				});
-    				$('empty_heart').css({
-    					'color': '#463331'
-    				});
+    				},(error)=>{console.log(error)})    				
 
         }			
                 
