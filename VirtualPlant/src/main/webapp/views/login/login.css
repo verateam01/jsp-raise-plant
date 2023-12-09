@@ -23,9 +23,13 @@ body {
 	width:1024px;
 	
 }
-
+	
 	.kakaoButton{
-		cursor:pointer
+		cursor:pointer;
+	}
+	a{
+		text-decoration-line: none;
+		color: #f97178;
 	}
 	.line {
         display: flex;
@@ -34,7 +38,7 @@ body {
         color: rgba(0, 0, 0, 0.35);
         font-size: 20px;
         margin: 8px 0px;
-        width:800px;
+        justify-content: center;
       }
       .line::before,
       .line::after {
@@ -44,5 +48,5 @@ body {
         height: 1px;
         font-size: 0px;
         line-height: 0px;
-        margin: 0px 32px;
+        margin: 0px 16px;
       }
