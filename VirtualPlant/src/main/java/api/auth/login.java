@@ -38,6 +38,7 @@ public class login extends HttpServlet {
 				loginUser.setId(rs.getString("id"));
 				loginUser.setPw(rs.getString("pw"));
 				loginUser.setNick(rs.getString("user_nick"));
+				loginUser.setUserType(rs.getString("user_type"));
             }
 
         } catch (SQLException e) {

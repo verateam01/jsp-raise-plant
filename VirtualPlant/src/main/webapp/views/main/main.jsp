@@ -11,7 +11,7 @@
     <script>Kakao.init('baf124810d0cd543bcd9dba2e0cf58f6');</script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
-    
+    <!-- Main CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/views/main/main.css">
     <!-- Font-awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -62,16 +62,23 @@ content: "";
 <body>
 <%
         User user = (User)session.getAttribute("user");
+		
         String kakaoUserName = (String)session.getAttribute("kakao_name");
+        
         String kakaoId = (String)session.getAttribute("kakao_id");
+        System.out.println("카카오유저"+kakaoUserName);
+        System.out.println("카카오유저"+kakaoId);
+        String userType = null;
         String name;
         String id;
         if(user != null){
             name = user.getNick();
             id = user.getId();
+            userType=user.getUserType();
         } else if(kakaoUserName != null){
             name = kakaoUserName;
             id = kakaoId;
+            userType = "kakao";
         } else {
             response.sendRedirect("/login");
             return;
@@ -164,15 +171,13 @@ content: "";
                     <span class="visually-hidden">Next</span>
                 </button>
             </div>
-            <div class="position-absolute top-100 start-50 translate-middle">
-	            <button id="next-stage" class="next-stage btn btn-outline-danger">Level Up!</button>
-            </div>
         </div>
         <div id="action_area">
             <div class="buttons_container">
                 <button id="water-button" class="water-button action_button">물주기</button>
                 <button id="fertilized-button" class="fertilized-button action_button">비료주기</button>
                 <button class="refresh-button btn btn-outline-primary action_button">Refresh</button>
+                <button id="next-stage" class="next-stage btn btn-outline-danger action_button">LevelUp!</button>
             </div>
             <div class="input_container">
                 <div class="input-group mb-3">
@@ -188,8 +193,8 @@ content: "";
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li><a class="dropdown-item" href="#">계정 설정</a></li>
-                <li><a class="dropdown-item" href="#">관리자 메뉴</a></li>
-                <li><a class="dropdown-item" href="#" onclick="logout('<%=kakaoUserName %>')">로그아웃</a></li>
+                <li><a class="manager-menu dropdown-item" href="#">관리자 메뉴</a></li>
+                <li><a class="dropdown-item logout-button" href="#">로그아웃</a></li>
             </ul>
         </div>
     </div> 
@@ -205,10 +210,39 @@ const sendAjaxRequest = (url, type, data, successCallback,errorCallback) => {
 	})
 }
 
+
 $(document).ready(function() {
-    	let userId = "<%= id %>"
+    	let userId = "<%= id %>";
+    	let userType = "<%=userType%>";
+    	console.log('userType',userType)
+   		const kakaoLogout = () => {
+   		    if (Kakao.Auth.getAccessToken()) {
+   		        Kakao.Auth.logout(function(){
+   		            window.location.href="/login";
+   		            console.log('로그아웃완료');
+   		        })
+   		    }
+   		}
+		/*로그아웃*/
+   		const logout = () => {
+   		    let kakaoUser = "<%=kakaoId%>"
+   		    console.log(kakaoUser);
+   		    if(Kakao.Auth.getAccessToken() != null){
+   		        kakaoLogout();
+   		        console.log('로직실행');
+   		    }
+   		    else{
+   		        sendAjaxRequest('/api/logout','POST',{},(response)=>{
+   		            if(response.status == "success")
+   		                window.location.href='/login';
+   		        },(error)=>{
+   		            console.log(error)
+   		        })
+   		    }
+   		}
+		$('.logout-button').click(logout);
+		
     	let	firstPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
-    	
     	/*
     	* @count: 주기 횟수
     	* @type: water, fertilized 
@@ -233,62 +267,66 @@ $(document).ready(function() {
     	
     	/*애정도에 따른 애정도바, 아이콘, 버튼 함수*/
     	const affectionBarUpdate = (affection) => {
-    // 버튼 요소들을 가져옵니다
-    const waterButton = document.getElementById("water-button");
-    const fertilizedButton = document.getElementById("fertilized-button");
-    const nextStageButton = document.getElementById("next-stage");
-    const nextdayButton = document.getElementById("next_day_button");
-
-    if (affection >= 100){
-        affection = 100;
-        document.getElementById("empty_heart").style.display = 'none';
-        document.getElementById("skull").style.display = 'none';
-        document.getElementById("full_heart").style.display = 'block';
-        $('#gauge-fill').css({
-		    'background-color': '#f97178'
-		});
-        $('#gauge-fill').css('width', affection + '%');
-    }
-    else if (affection < 0) {
-        document.getElementById("full_heart").style.display = 'none';               
-        document.getElementById("empty_heart").style.display = 'none';
-        document.getElementById("skull").style.display = 'block';
-
-        // 애정도가 음수일 때 버튼들을 숨깁니다.
-        waterButton.style.display = 'none';
-        fertilizedButton.style.display = 'none';
-        nextStageButton.style.display = 'none';
-        nextdayButton.style.display = 'none';
-
-    	console.log("애정도테스트~" + affection)
-        $('#gauge-fill').css({
-		    'width': '100%',
-		    'background-color': '#463331'
-		});
-		$('empty_heart').css({
-			'color': '#463331'
-		});
-    }
-    else {
-        affection = affection;
-        document.getElementById("full_heart").style.display = 'none';
-        document.getElementById("skull").style.display = 'none';
-        document.getElementById("empty_heart").style.display = 'block';
-
-        // 애정도가 음수가 아닐 때 버튼들을 보이게 합니다.
-        waterButton.style.display = 'block';
-        fertilizedButton.style.display = 'block';
-        nextStageButton.style.display = 'block';
-        nextdayButton.style.display = 'block';
-        $('#gauge-fill').css({
-		    'background-color': '#f97178'
-		});
-        $('#gauge-fill').css('width', affection + '%');
-    }
-    
-    
-}
-
+		    // 버튼 요소들을 가져옵니다
+		    const waterButton = document.getElementById("water-button");
+		    const fertilizedButton = document.getElementById("fertilized-button");
+		    const nextStageButton = document.getElementById("next-stage");
+		    const nextdayButton = document.getElementById("next_day_button");
+		
+		    if (affection >= 100){
+		        affection = 100;
+		        document.getElementById("empty_heart").style.display = 'none';
+		        document.getElementById("skull").style.display = 'none';
+		        document.getElementById("full_heart").style.display = 'block';
+		    }
+		    else if (affection < 0) {
+		        document.getElementById("full_heart").style.display = 'none';               
+		        document.getElementById("empty_heart").style.display = 'none';
+		        document.getElementById("skull").style.display = 'block';
+		
+		        // 애정도가 음수일 때 버튼들을 숨깁니다.
+		        waterButton.style.display = 'none';
+		        fertilizedButton.style.display = 'none';
+		        nextStageButton.style.display = 'none';
+		        nextdayButton.style.display = 'none';
+		    }
+		    else {
+		        affection = affection;
+		        document.getElementById("full_heart").style.display = 'none';
+		        document.getElementById("skull").style.display = 'none';
+		        document.getElementById("empty_heart").style.display = 'block';
+		
+		        // 애정도가 음수가 아닐 때 버튼들을 보이게 합니다.
+		        waterButton.style.display = 'block';
+		        fertilizedButton.style.display = 'block';
+		        nextStageButton.style.display = 'block';
+		        nextdayButton.style.display = 'block';
+		    }
+		    $('#gauge-fill').css('width', affection + '%');
+		}
+    	
+		/*호감도,단계에따른 버튼보여주는 로직*/    	
+    	const displayLevelUp = (affection,stage) => {
+    		if(stage == 4){
+    			$('.refresh-button').show();
+    			$('.next-stage').hide();
+    		}
+    		else if(affection >= 100 && stage < 4){
+    			$('.refresh-button').hide();
+    			$('.next-stage').show();
+    		}
+    		else{
+    			$('.refresh-button').show();
+    			$('.next-stage').hide();
+    		}
+    			
+    	}
+		
+    	$('.manager-menu').click(()=>{
+    		sendAjaxRequest('/api/admin/user','POST',{userType:userType},(response)=>{
+    			console.log(response);
+    		},(err)=>{console.log(err)})
+    	})
     	
     	/*사진변경코드*/
     	/*
@@ -326,27 +364,31 @@ $(document).ready(function() {
         const witherPlant = (plantId) => {
     				sendAjaxRequest('/api/plant/wither','POST',{userId:userId,plantId:plantId},(response)=>{  	    	
     	    			changeImg(response.plantId,response.currStage);
-    				},(error)=>{console.log(error)})    				
-
+    	    			$('#gauge-fill').css({
+        				    'width': '100%',
+        				    'background-color': '#463331'
+        				});
+        				$('empty_heart').css({
+        					'color': '#463331'
+        				});
+    				},(error)=>{console.log(error)})
         }			
                 
     	/*식물데이터 얻어오는 함수*/
     	const fetchPlantData = (plantId) => {
-
     		sendAjaxRequest('/api/plant/info','GET',{userId:userId,plantId:plantId},(response)=>{    			
     			console.log(response)
     			affectionBarUpdate(response.affection);    			
     			changeImg(response.plantId,response.currStage);
+    			displayLevelUp(response.affection,response.currStage);
     			
     			// 날짜 변경 로직
-    			console.log("날짜잘받아오낭?"+ response.plantDay);
     			let datData = response.plantDay;
-    			document.querySelector('.plant_day').innerText = datData + ' Day';  
+    			document.querySelector('.plant_day').innerText = datData + ' Day';
+    			
     			if (response.affection < 0){
     				witherPlant(plantId);
     			}
-    			
-    			   			
     		},(error)=>{console.log(error)})
 
     	}
@@ -357,7 +399,6 @@ $(document).ready(function() {
         $('#carouselExampleIndicators').on('slid.bs.carousel',function(){
         	  let plantId = $(this).find('.carousel-item.active img').data('plant-id');
         	   fetchPlantData(plantId);
-        	   changeImg(response.plantId,response.currStage);
         	   $('.think-answer').html('');
    	    });
     	
@@ -371,7 +412,8 @@ $(document).ready(function() {
     		sendAjaxRequest('/api/plant/water','POST',{userId:userId, plantId:currentPlantId,lastWaterd:formattedDateTime},(response)=>{
     			console.log('waterPlant',response);
     			affectionBarUpdate(response.affection);
-				answerSpeech(response.waterCount,"water");   
+				answerSpeech(response.waterCount,"water");  
+				displayLevelUp(response.affection,response.currStage);
 				if (response.affection < 0){
     				witherPlant(currentPlantId);
     			}
@@ -388,7 +430,8 @@ $(document).ready(function() {
             sendAjaxRequest('/api/plant/fertilizer','POST',{userId:userId, plantId:currentPlantId,lastFertilizedTime:formattedDateTime},(response)=>{
     			console.log(response);
     			affectionBarUpdate(response.affection);
-    			answerSpeech(response.fertilizerCount,"fertilizer");  
+    			answerSpeech(response.fertilizerCount,"fertilizer");
+    			displayLevelUp(response.affection,response.currStage);
     			if (response.affection < 0){
     				witherPlant(currentPlantId);
     			}
@@ -421,6 +464,7 @@ $(document).ready(function() {
             	console.log(response.plantId,response.currStage);
             	affectionBarUpdate(response.affection);
             	changeImg(response.plantId,response.currStage);
+            	displayLevelUp(response.affection,response.currStage);
             })
     	})
     	
@@ -431,6 +475,7 @@ $(document).ready(function() {
     	        console.log(response.plantId, response.plantDay);
     	        affectionBarUpdate(response.affection);
     	        fetchPlantData(currentPlantId);
+    	        displayLevelUp(response.affection,response.currStage);
                 
     	    });
 

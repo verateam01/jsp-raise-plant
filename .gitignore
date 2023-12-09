@@ -2,3 +2,4 @@
 
 # Ignore config
 VirtualPlant/src/main/java/config.properties
+Servers/*

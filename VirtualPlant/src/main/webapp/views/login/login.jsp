@@ -12,11 +12,6 @@
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery.min.js">
 </script>
-<style>
-	.kakaoButton{
-		cursor:pointer
-	}
-</style>
 </head>
 <body>
 <div class="container d-flex flex-column mt-4">
@@ -28,25 +23,23 @@
 	<div class="d-flex justify-content-end mt-3">
 		<button id="loginButton" class="btn btn-primary" style="width: 90px; background-color: #f97178; border:none;">로그인</button>
 	</div>
-	<div class="d-flex flex-column align-middle">
-		<p>소셜로그인</p>
-		<span onclick="kakaoLogin();">
-      <a href="javascript:void(0)">
-					<img class="kakaoButton" style="width:185px; hegiht:45px;" src="../../img/kakao_loginButton.png" alt="카카오로그인버튼"/>
-      </a>
-		</span>
+	<div class="d-flex flex-column align-item-middle">
+		<div class="line">
+			소셜로그인
+		</div>
+		<div class="kakao" onclick="kakaoLogin();">
+      		<a href="javascript:void(0)">
+				<img class="kakaoButton" style="width:185px; hegiht:45px;" src="../../img/kakao_loginButton.png" alt="카카오로그인버튼"/>
+      		</a>
+		</div>
 	</div>
 </div>
-<form mehtod="">
 
-
-</form>
 <!--카카오로그인-->
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>
 	  Kakao.init('baf124810d0cd543bcd9dba2e0cf58f6');
-  console.log(Kakao.isInitialized());
-</script>
+  </script>
 <script>
     function kakaoLogin() {
         Kakao.Auth.login({
