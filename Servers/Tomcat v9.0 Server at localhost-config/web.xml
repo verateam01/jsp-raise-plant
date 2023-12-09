@@ -441,8 +441,8 @@
         <url-pattern>*.jsp</url-pattern>
         <url-pattern>*.jspx</url-pattern>
     </servlet-mapping>
-	
-	<servlet>
+    
+    	<servlet>
 		<servlet-name>main-jsp</servlet-name>
 		<jsp-file>/views/main/main.jsp</jsp-file>
 	</servlet>
@@ -481,6 +481,18 @@
 		<servlet-name>test-jsp</servlet-name>
 		<url-pattern>/test</url-pattern>
 	</servlet-mapping>
+	
+	
+	<servlet>
+		<servlet-name>manager-jsp</servlet-name>
+		<jsp-file>/views/manager/manager.jsp</jsp-file>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>manager-jsp</servlet-name>
+		<url-pattern>/manager</url-pattern>
+	</servlet-mapping>
+
     <!-- The mapping for the SSI servlet -->
 <!--
     <servlet-mapping>

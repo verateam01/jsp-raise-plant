@@ -34,6 +34,7 @@ body {
         color: rgba(0, 0, 0, 0.35);
         font-size: 20px;
         margin: 8px 0px;
+        width:800px;
       }
       .line::before,
       .line::after {
@@ -43,5 +44,5 @@ body {
         height: 1px;
         font-size: 0px;
         line-height: 0px;
-        margin: 0px 16px;
+        margin: 0px 32px;
       }

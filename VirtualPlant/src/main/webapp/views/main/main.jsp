@@ -62,19 +62,23 @@ content: "";
 <body>
 <%
         User user = (User)session.getAttribute("user");
+		
         String kakaoUserName = (String)session.getAttribute("kakao_name");
         
         String kakaoId = (String)session.getAttribute("kakao_id");
         System.out.println("카카오유저"+kakaoUserName);
         System.out.println("카카오유저"+kakaoId);
+        String userType = null;
         String name;
         String id;
         if(user != null){
             name = user.getNick();
             id = user.getId();
+            userType=user.getUserType();
         } else if(kakaoUserName != null){
             name = kakaoUserName;
             id = kakaoId;
+            userType = "kakao";
         } else {
             response.sendRedirect("/login");
             return;
@@ -156,7 +160,7 @@ content: "";
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li><a class="dropdown-item" href="#">계정 설정</a></li>
-                <li><a class="dropdown-item" href="#">관리자 메뉴</a></li>
+                <li><a class="manager-menu dropdown-item" href="#">관리자 메뉴</a></li>
                 <li><a class="dropdown-item logout-button" href="#">로그아웃</a></li>
             </ul>
         </div>
@@ -175,8 +179,9 @@ const sendAjaxRequest = (url, type, data, successCallback,errorCallback) => {
 
 
 $(document).ready(function() {
-    	let userId = "<%= id %>"
-    	
+    	let userId = "<%= id %>";
+    	let userType = "<%=userType%>";
+    	console.log('userType',userType)
    		const kakaoLogout = () => {
    		    if (Kakao.Auth.getAccessToken()) {
    		        Kakao.Auth.logout(function(){
@@ -283,7 +288,12 @@ $(document).ready(function() {
     		}
     			
     	}
-
+		
+    	$('.manager-menu').click(()=>{
+    		sendAjaxRequest('/api/admin/user','POST',{userType:userType},(response)=>{
+    			console.log(response);
+    		},(err)=>{console.log(err)})
+    	})
     	
     	/*사진변경코드*/
     	/*
