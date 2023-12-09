@@ -96,28 +96,25 @@
 			</div>
 			</section>
 					<%-- 모달 --%>
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade" id="modifyModal" tabindex="-1" aria-labelledby="modifyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="modifyModalLabel">Modal title</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         ...
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        
       </div>
     </div>
   </div>
 </div>
 </div>
 		
-		
-
+	
 
 
 
@@ -134,27 +131,6 @@
 </body>
 <script>
 
-
-$(document).ready(function() {
-    // 회원관리 탭 버튼 클릭 이벤트
-    $("#user_tab_button").click(function() {
-        // 회원관리 섹션을 표시하고, 식물관리 섹션을 숨김
-        $("#user_tab").show();
-        $("#plant_tab").hide();
-    });
-
-    // 식물관리 탭 버튼 클릭 이벤트
-    $("#plant_tab_button").click(function() {
-        // 식물관리 섹션을 표시하고, 회원관리 섹션을 숨김
-        $("#plant_tab").show();
-        $("#user_tab").hide();
-    });
-});
-
-
-
-
-
 const sendAjaxRequest = (url, type, data, successCallback, errorCallback) => {
     $.ajax({
         url: url,
@@ -167,8 +143,22 @@ const sendAjaxRequest = (url, type, data, successCallback, errorCallback) => {
 
 
 
-$(document).ready(() => {
-		
+$(document).ready(() => {	
+	
+	// 회원관리 탭 버튼 클릭 이벤트
+    $("#user_tab_button").click(function() {
+        // 회원관리 섹션을 표시하고, 식물관리 섹션을 숨김
+        $("#user_tab").show();
+        $("#plant_tab").hide();
+    });
+
+    // 식물관리 탭 버튼 클릭 이벤트
+    $("#plant_tab_button").click(function() {
+        // 식물관리 섹션을 표시하고, 회원관리 섹션을 숨김
+        $("#plant_tab").show();
+        $("#user_tab").hide();
+    });
+
 	
 	const fetchUsertData  = (userType) => {
     sendAjaxRequest(
@@ -190,8 +180,8 @@ $(document).ready(() => {
                 '<td>' + user.user_nick + '</td>' +
                 '<td>' + user.email + '</td>' +
                 '<td>' + user.user_type + '</td>' +
-                '<td><button type="button" class="btn btn-outline-secondary" id="user_edit_btn" data-userid="' + user.user_id + '" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-pen"></i></button>' +
-                '<button type="button" class="btn btn-outline-secondary" id="user_delete_btn" data-userid="' + user.user_id + '" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-trash"></i></button></td>' + 
+                '<td><button type="button" class="btn btn-outline-secondary" id="user_edit_btn" data-userid="' + user.user_id + '" data-bs-toggle="modal" data-bs-target="#modifyModal"><i class="fa-solid fa-pen"></i></button>' +
+                '<button type="button" class="btn btn-outline-secondary" id="user_delete_btn" data-userid="' + user.user_id + '" data-bs-toggle="modal" data-bs-target="#modifyModal"><i class="fa-solid fa-trash"></i></button></td>' + 
                 '</tr>';
             $("#userTable tbody").append(row);
             
@@ -227,8 +217,7 @@ $(document).ready(() => {
 		                    '<td>' + gardenia + '</td>' + 
 		                    '<td>' + hyacinth + '</td>' + 
 		                    '<td>' + cactus + '</td>' + 
-		                    '<td><button type="button" class="btn btn-outline-secondary" id="plant_edit_btn" data-userid="' + user.user_id + '" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-pen"></i></button>' +
-		                    '<button type="button" class="btn btn-outline-secondary" id="plant_delete_btn" data-userid="' + user.user_id + '" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-trash"></i></button></td>' + 
+		                    '<td><button type="button" class="btn btn-outline-secondary" id="plant_edit_btn" data-userid="' + user.user_id + '" data-bs-toggle="modal" data-bs-target="#modifyModal"><i class="fa-solid fa-pen"></i></button>' + 
 		                   '</tr>';
 		                $("#plantTable tbody").append(row);
 		            });
@@ -243,19 +232,150 @@ $(document).ready(() => {
 	fetchUsertData("admin");
 	fetchPlantData("admin");
 	
-	// 수정 삭제 로직
 	
+	// 회원 수정 모달
 	$(document).on('click', '#user_edit_btn', function() {
-	    $('#exampleModal .modal-body').text('유저 수정중');
+		
+		$('#modifyModal .modal-title').text('회원 수정하기');
+		$('#modifyModal .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button><button type="button" id="save-user-btn" class="btn btn-primary">저장하기</button>');
+		
+	    let modalUserId = $(this).data('userid');
+
+	    $.get('/views/manager/userEdit.html', function(htmlContent) {
+	        $('#modifyModal .modal-body').html(htmlContent);
+	        
+	        
+	    }).fail(function() {
+	        console.error("HTML 파일을 불러오는 데 실패했습니다.");
+	    });
+
+	    sendAjaxRequest(
+	        "/api/admin/user",
+	        "POST",
+	        { userType: "admin" },
+	        (response) => {	            
+	            let userData = response.find(user => {
+    			return String(user.user_id) === String(modalUserId);
+			});
+	            console.log('전체 응답 데이터:', response);           
+	            
+
+	            if (userData) {
+	            	$('#modifyModal .modal-body input[name="user_id"]').val(userData.user_id);
+	                $('#modifyModal .modal-body input[name="id"]').val(userData.id);
+	                $('#modifyModal .modal-body input[name="name"]').val(userData.user_name);
+	                $('#modifyModal .modal-body input[name="nickname"]').val(userData.user_nick);
+	                $('#modifyModal .modal-body input[name="email"]').val(userData.email);
+	                $('#modifyModal .modal-body input[name="type"]').val(userData.user_type);
+	            }
+	            else {
+	                console.log('해당 userId를 가진 사용자를 찾지 못함:', modalUserId);
+	            }
+	        },
+	        (error) => {
+	            console.error("에러: ", error);
+	        }
+	    );
 	});
-	$(document).on('click', '#user_delete_btn', function() {
-	    $('#exampleModal .modal-body').text('유저 삭제중');
+
+	
+	// 회원정보 저장
+	$(document).on('click', '#save-user-btn', function() {
+    // AJAX 요청 로직
+	    let userId = $(this).data('userid');
+	    let id = $('#modifyModal .modal-body input[name="id"]').val();
+	    let user_name = $('#modifyModal .modal-body input[name="name"]').val();
+	    let user_nick = $('#modifyModal .modal-body input[name="nickname"]').val();
+	    let email = $('#modifyModal .modal-body input[name="email"]').val();
+	    let userType = $('#modifyModal .modal-body input[name="type"]').val();
+	
+	    sendAjaxRequest('/api/admin/user/edit', 'POST', {
+	        userId: userId, 
+	        id: id, 
+	        userName: user_name, 
+	        userNick: user_nick,
+	        email: email, 
+	        userType: userType 
+	    }, (response) => {
+	        if(response.status == "success")
+	            window.location.reload();
+	    }, (error) => {
+	        console.error("에러: ", error);
+	    });
 	});
+	
+	
+	// 식물 수정 모달
 	$(document).on('click', '#plant_edit_btn', function() {
-	    $('#exampleModal .modal-body').text('식물 수정중');
+		$('#modifyModal .modal-title').text('식물 수정하기');
+		$('#modifyModal .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button><button type="button" id="save-plant-btn" class="btn btn-primary">저장하기</button>');
+		
+	    let modalUserId = $(this).data('userid');
+
+	    $.get('/views/manager/plantEdit.html', function(htmlContent) {
+	        $('#modifyModal .modal-body').html(htmlContent);
+	        
+	        
+	    }).fail(function() {
+	        console.error("HTML 파일을 불러오는 데 실패했습니다.");
+	    });
+
+	    sendAjaxRequest(
+	        "/api/admin/user",
+	        "POST",
+	        { userType: "admin" },
+	        (response) => {	            
+	            let userData = response.find(user => {
+    			return String(user.user_id) === String(modalUserId);
+			});
+	            let gardenia = userData.plants.length > 0 ? userData.plants[2] : "";
+                let hyacinth = userData.plants.length > 1 ? userData.plants[1] : "";
+                let cactus = userData.plants.length > 2 ? userData.plants[0] : "";
+
+	            if (userData) {
+	            	$('#modifyModal .modal-body input[name="user_id"]').val(userData.user_id);
+	            	$('#modifyModal .modal-body input[name="id"]').val(userData.id);
+	            	$('#modifyModal .modal-body input[name="nickname"]').val(userData.user_nick);
+	            	$('#modifyModal .modal-body input[name="gardenia"]').val(gardenia);
+	            	$('#modifyModal .modal-body input[name="hyacinth"]').val(hyacinth);
+	            	$('#modifyModal .modal-body input[name="cactus"]').val(cactus);
+	            }
+	            else {
+	                console.log('해당 userId를 가진 사용자를 찾지 못함:', modalUserId);
+	            }
+	        },
+	        (error) => {
+	            console.error("에러: ", error);
+	        }
+	    );
 	});
-	$(document).on('click', '#plant_delete_btn', function() {
-	    $('#exampleModal .modal-body').text('식물 삭제중');
+
+	
+	// 식물정보 저장
+	$('#save-plant-btn').click(function() {      
+        let gardenia = $('#modifyModal .modal-body input[name="gardenia"]').val();
+        let hyacinth = $('#modifyModal .modal-body input[name="hyacinth"]').val();
+        let cactus = $('#modifyModal .modal-body input[name="cactus"]').val();
+        
+        sendAjaxRequest('/api/admin/user/edit', 'POST', {
+            userId: userId, 
+            gardenia: gardenia,
+            hyacinth: hyacinth,
+            cactus: cactus
+        }, (response) => {
+            console.log(response)
+        }, (error) => {
+            console.error("에러: ", error);
+        });
+    });
+
+
+	
+
+	$(document).on('click', '#user_delete_btn', function() {
+		$('#modifyModal .modal-title').text('회원 삭제하기');
+	    $('#modifyModal .modal-body').text('유저를 삭제하시겠습니까?');
+	    $('#modifyModal .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button><button type="button" id="save-user-btn" class="btn btn-danger">삭제하기</button>');
 	});
 
 	// 메인으로 돌아가기
@@ -263,7 +383,8 @@ $(document).ready(() => {
 		window.location.href='/main';
     })
 	
-});
+
+	});
 
 
 
