@@ -325,6 +325,17 @@ $(document).ready(function() {
     	$('.manager-menu').click(()=>{
     		sendAjaxRequest('/api/admin/user','POST',{userType:userType},(response)=>{
     			console.log(response);
+    			if('<%=userType%>' == 'admin'){    				
+    			
+		                window.location.href='/manager';
+		                console.log(<%=userType%>);
+		                }
+    			
+    		
+    			else {
+    				alert("관리자만 접근할 수 있습니다.");
+    				console.log('<%=userType%>');
+    			}
     		},(err)=>{console.log(err)})
     	})
     	
