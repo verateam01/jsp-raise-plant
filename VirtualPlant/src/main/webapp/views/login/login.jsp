@@ -15,11 +15,13 @@
 </head>
 <body>
 <div class="container d-flex flex-column mt-4">
+	<div class="needs-validation">
 	<h1 class="mb-4">로그인</h1>
-		<p>아이디</p>
+	<p>아이디</p>
 	<input type="text" class="form-control mb-4 p-3" placeholder="아이디" name="id"/>
-		<p>비밀번호</p>
+	<p>비밀번호</p>
 	<input type="password" class="form-control mb-4 p-3" placeholder="비밀번호" name="pw"/>
+	</div>
 	<div class="d-flex justify-content-end mt-1">
 		<button id="loginButton" class="btn btn-primary" style="width: 90px; background-color: #f97178; border:none;">로그인</button>
 	</div>

@@ -20,27 +20,29 @@
 </head>
 <body>
 	<div class="container d-flex flex-column" style="height: 100vh;">
-	<div style="margin: 50px;">
-		<h1>회원가입</h1>
-		<p class="m-0 p-2">이름</p>
-		<input type="text" class="form-control" placeholder="이름" name="name" />
-		<p class="m-0 p-2">닉네임</p>
-		<input type="text" class="form-control" placeholder="닉네임" name="nick" />
-		<p class="m-0 p-2">
-			아이디
-			<button id="duplicatedId" class="btn btn-primary"; style="margin-left: 20px;background-color: #f97178; border:none;">중복확인</button>
-		</p>
-		<input type="text" class="form-control" placeholder="아이디" name="id" />
-		<p class="m-0 p-2">비밀번호</p>
-		<input type="password" class="form-control" placeholder="비밀번호" name="pw" />
-		<div class="d-flex justify-content-end mt-3">
-			<button id="registerButton" class="btn btn-primary"
-				style="width: 90px; background-color: #f97178; border:none;">회원가입</button>
+		<div style="margin: 50px;">
+			<h1>회원가입</h1>
+			<p class="m-0 p-2">이름</p>
+			<input type="text" class="form-control" placeholder="이름" name="name" />
+			<p class="m-0 p-2">닉네임</p>
+			<input type="text" class="form-control" placeholder="닉네임" name="nick" />
+			<p class="m-0 p-2">
+				아이디
+				<button id="duplicatedId" class="btn btn-primary" style="margin-left: 20px;background-color: #f97178; border:none;">중복확인</button>
+			</p>
+			<input type="text" class="form-control" placeholder="아이디" name="id" />
+			<div id="idWarning" class="alert alert-danger mt-2" style="display: none;">아이디가 이미 존재합니다!</div>
+			
+			<p class="m-0 p-2">비밀번호</p>
+			<input type="password" class="form-control" placeholder="비밀번호" name="pw" />
+			<div class="d-flex justify-content-end mt-3">
+				<button id="registerButton" class="btn btn-primary"
+					style="width: 90px; background-color: #f97178; border:none;">회원가입</button>
+			</div>
+			<div class="d-flex justify-content-center">
+				<p>회원이신가요? <a href="/login" style="text-decoration:none; color:#f97178;">로그인하러가기</a></p>
+			</div>
 		</div>
-		<div class="d-flex justify-content-center">
-			<p>회원이신가요? <a href="/login" style="text-decoration:none; color:#f97178;">로그인하러가기</a></p>
-		</div>
-	</div>
 	</div>
 
 	<script>

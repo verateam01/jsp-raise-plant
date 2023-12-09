@@ -27,7 +27,7 @@ public class user extends HttpServlet {
         if (userType.equals("admin")) {
             try (Connection conn = DBConn.getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(
-                     "SELECT u.user_id, u.id, u.email, u.user_name, u.user_nick, u.user_type, p.plant_name " +
+                     "SELECT u.user_id, u.id, u.email, u.user_name, u.user_nick, u.user_type, up.plant_id, p.plant_name " +
                      "FROM users u " +
                      "LEFT JOIN user_plants up ON u.user_id = up.user_id " +
                      "LEFT JOIN plants p ON up.user_plant_id = p.user_plant_id"
@@ -43,6 +43,7 @@ public class user extends HttpServlet {
                     if (userJson == null) {
                         userJson = new JSONObject();
                         userJson.put("user_id", userId);
+                        userJson.put("plant_id", rs.getInt("plant_id"));
                         userJson.put("id", rs.getString("id"));
                         userJson.put("email", rs.getString("email"));
                         userJson.put("user_name", rs.getString("user_name"));

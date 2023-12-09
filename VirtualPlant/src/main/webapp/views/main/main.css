@@ -172,8 +172,8 @@ img {
     display: flex;
     flex-direction: row;
     flex: 10;
-    width: 100%; /* 부모 요소의 너비를 100%로 설정 */
-    height: 100%; /* 부모 요소의 높이를 100%로 설정 */
+    width: 100%;
+    height: 100%;
 }
 
 #user_menu {
@@ -221,4 +221,11 @@ img {
 #carouselExampleIndicators {
     width: 100%; /* 너비를 100%로 설정 */
     height: 100%; /* 높이를 100%로 설정 */
+}
+
+#modal_button{
+	position: absolute;
+	z-index: 100;
+	top: 42px;
+    left: 157px;
 }
