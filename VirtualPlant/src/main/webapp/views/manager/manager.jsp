@@ -276,6 +276,7 @@ $(document).ready(() => {
 	            console.error("에러: ", error);
 	        }
 	    );
+	    $('#save-user-btn').data('userid', modalUserId);
 	});
 
 	
@@ -288,7 +289,8 @@ $(document).ready(() => {
 	    let user_nick = $('#modifyModal .modal-body input[name="nickname"]').val();
 	    let email = $('#modifyModal .modal-body input[name="email"]').val();
 	    let userType = $('#modifyModal .modal-body input[name="type"]').val();
-	
+	    console.log(userId);
+	    console.log(id);
 	    sendAjaxRequest('/api/admin/user/edit', 'POST', {
 	        userId: userId, 
 	        id: id, 
@@ -348,6 +350,7 @@ $(document).ready(() => {
 	            console.error("에러: ", error);
 	        }
 	    );
+	    $('#save-user-btn').data('userid', modalUserId);
 	});
 
 	
@@ -364,6 +367,8 @@ $(document).ready(() => {
             cactus: cactus
         }, (response) => {
             console.log(response)
+            if(response.status == "success")
+	            window.location.reload();
         }, (error) => {
             console.error("에러: ", error);
         });
@@ -373,10 +378,29 @@ $(document).ready(() => {
 	
 
 	$(document).on('click', '#user_delete_btn', function() {
+		let modalUserId = $(this).data('userid');
 		$('#modifyModal .modal-title').text('회원 삭제하기');
 	    $('#modifyModal .modal-body').text('유저를 삭제하시겠습니까?');
-	    $('#modifyModal .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button><button type="button" id="save-user-btn" class="btn btn-danger">삭제하기</button>');
+	    $('#modifyModal .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button><button type="button" id="delete-btn" class="btn btn-danger">삭제하기</button>');
+	    $('#delete-btn').data('userid', modalUserId);
+	    console.log(modalUserId);
 	});
+	
+	// 이벤트 위임을 통한 '삭제하기' 버튼 클릭 처리
+	$(document).on('click', '#delete-btn', function() {  
+	    let userId = $(this).data('userid');
+	    console.log(userId); // 데이터 확인
+	    sendAjaxRequest('/api/admin/user/delete', 'POST', {
+	        userId: userId,            
+	    }, (response) => {
+	        console.log(response);
+	        if(response.status == "success")
+	            window.location.reload();
+	    }, (error) => {
+	        console.error("에러: ", error);
+	    });
+	});
+
 
 	// 메인으로 돌아가기
 	$('#exit_button').click(()=>{
