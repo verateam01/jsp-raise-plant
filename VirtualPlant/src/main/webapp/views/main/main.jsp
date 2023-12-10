@@ -62,12 +62,8 @@ content: "";
 <body>
 <%
         User user = (User)session.getAttribute("user");
-		
         String kakaoUserName = (String)session.getAttribute("kakao_name");
-        
         String kakaoId = (String)session.getAttribute("kakao_id");
-        System.out.println("카카오유저"+kakaoUserName);
-        System.out.println("카카오유저"+kakaoId);
         String userType = null;
         String name;
         String id;
@@ -83,8 +79,7 @@ content: "";
             response.sendRedirect("/login");
             return;
         }
-
-    %>            
+%>            
     <div id="container">
         <div id="day_info">
             <div id="day_left"></div>
@@ -166,7 +161,22 @@ content: "";
                     <span class="visually-hidden">Next</span>
                 </button>
             </div>
+            <!--식물이름 -->
+            <div class="plant-div">
+			    <span class="plant-name" style="font-size:2rem;">식물 이름</span>
+			    <i class="fa-solid fa-pen open-pen" style="padding-bottom:4px;"></i>
+			    <div class="edit-plant-container d-none align-items-center">
+			        <div class="input-group">
+			            <input type="text" class="form-control edit-plant-name" value="" name="edit-plant-name"/>
+			            <span class="input-group-text">
+			                <i class="fa-solid fa-pen save-plant-name close-pen"></i>
+			            </span>
+			        </div>
+			    </div>
+			</div>
         </div>
+        
+        
         <div id="action_area">
             <div class="buttons_container">
                 <button id="water-button" class="water-button action_button">물주기</button>
@@ -387,9 +397,6 @@ $(document).ready(function() {
     	        });
     	    }
     	};
-
-
-
         
         /* 식물 죽는 로직 */
         const witherPlant = (plantId) => {
@@ -404,7 +411,7 @@ $(document).ready(function() {
         				});
     				},(error)=>{console.log(error)})
         }			
-                
+                               
     	/*식물데이터 얻어오는 함수*/
     	const fetchPlantData = (plantId) => {
     		sendAjaxRequest('/api/plant/info','GET',{userId:userId,plantId:plantId},(response)=>{    			
@@ -412,6 +419,7 @@ $(document).ready(function() {
     			affectionBarUpdate(response.affection);    			
     			changeImg(response.plantId,response.currStage);
     			displayLevelUp(response.affection,response.currStage);
+    			$('.plant-name').html(response.plantName);
     			
     			// 날짜 변경 로직
     			let datData = response.plantDay;
@@ -425,6 +433,71 @@ $(document).ready(function() {
     	}
     	
        	fetchPlantData(firstPlantId);
+       	
+       	/*식물이름 수정*/
+       	const showEditElements= () =>{
+		    let currentName = $('.plant-name').text();
+		    $('.edit-plant-name').val(currentName);
+		    $('.edit-plant-container').removeClass('d-none').addClass('d-flex');
+		    $('.plant-name').hide();
+		    $('.open-pen').hide();
+		    $('.edit-plant-name').focus();
+		}
+       	
+       	const hideEditElements = ()=> {
+       	    $('.edit-plant-container').addClass('d-none').removeClass('d-flex');
+       	    $('.open-pen').show();
+       	    $('.plant-name').show();
+       	}
+       	
+       	$(document).on('click', '.plant-div', function(e) {
+       		e.stopPropagation();
+            if ($(e.target).is('.plant-name, .open-pen')) {
+                showEditElements();
+            }
+       	})
+       	
+       	$('.save-plant-name').click(function() {
+        	let newName = $('.edit-plant-name').val();
+        	let plantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
+        	sendAjaxRequest('/api/plant/name/edit','POST',{
+        		newName,
+        		userId,
+        		plantId
+        	},(res)=>{
+        		if(res.plantName)
+		        		$('.plant-name').text(res.plantName)
+        		hideEditElements();
+        	});
+    	});
+       	
+       	
+       	$('.edit-plant-name').keypress(function(e) {
+	        if(e.which == 13) { // 엔터 키 코드는 13
+	            let newName = $(this).val();
+	            let plantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
+	            console.log(newName);
+	            sendAjaxRequest('/api/plant/name/edit','POST',{
+	        		newName,
+	        		userId,
+	        		plantId
+	        	},(res)=>{
+        		if(res.plantName)
+		        		$('.plant-name').text(res.plantName)
+        		hideEditElements();
+        	});
+	        }
+    	});
+       	
+       	$(document).click(function(e) {
+            if (!$(e.target).closest('.edit-plant-container').length && !$(e.target).is('.open-pen')) {
+                $('.edit-plant-container').removeClass('d-flex').addClass('d-none');
+                $('.plant-name').show();
+                $('.open-pen').show();
+            }
+        });
+       	
+       	
        	
     	/*슬라이드 넘길시 로직*/
         $('#carouselExampleIndicators').on('slid.bs.carousel',function(){
@@ -512,8 +585,6 @@ $(document).ready(function() {
     	});
     	
 	 });
-     	
-     	
     </script>
     <script>
     const sendGptRequest = () => {
