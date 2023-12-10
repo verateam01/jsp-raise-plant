@@ -107,6 +107,7 @@ content: "";
         	</div>
         	
         	<div id="guide_modal">
+        	
         	<!-- Button trigger modal -->
 		<button type="button" id="modal_button" class="btn btn-secondary" data-bs-toggle="modal"
 			data-bs-target="#exampleModal" style="border-radius: 20px;">
@@ -116,11 +117,10 @@ content: "";
 		<!-- Modal -->
 		<div class="modal fade" id="exampleModal" tabindex="-1"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-scrollable">
+			<div class="modal-dialog modal-dialog-scrollable modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h1 class="modal-title fs-5" id="exampleModalLabel">Modal
-							title</h1>
+						<h1 class="modal-title fs-1" id="exampleModalLabel"></h1>
 						<button type="button" class="btn-close" data-bs-dismiss="modal"
 							aria-label="Close"></button>
 					</div>
@@ -128,12 +128,7 @@ content: "";
 						도움말
 
 					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-bs-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">Save
-							changes</button>
-					</div>
+					<p>
 				</div>
 			</div>
 		</div>
@@ -379,13 +374,17 @@ $(document).ready(function() {
 
     	    if (plantId == 1) {
     	        imgSrc = '../../img/plant_img/Gardenia' + currStage + '.jpg';
-    	        jspFile = '/gardenia';
+    	        $('.modal-title').text('치자나무는 어떻게 키워요?');
+    	        jspFile = '/views/modal/GardeniaGuide.html';
+    	        
     	    } else if (plantId == 2) {
     	        imgSrc = '../../img/plant_img/Hyacinth' + currStage + '.jpg';
-    	        jspFile = '/hyacinth'; 
+    	        $('.modal-title').text('히아신스는 어떻게 키워요?');
+    	        jspFile = '/views/modal/HyacinthGuide.html'; 
     	    } else if (plantId == 3) {
     	        imgSrc = '../../img/plant_img/Cactus' + currStage + '.jpg';
-    	        jspFile = '/cactus';
+    	        $('.modal-title').text('선인장은 어떻게 키워요?');
+    	        jspFile = '/views/modal/CactusGuide.html';
     	    }
 
     	    // 이미지 소스 변경

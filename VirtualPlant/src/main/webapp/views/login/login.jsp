@@ -36,8 +36,15 @@
 		</div>
 		<div class="d-flex justify-content-center mt-2">
 			<p>회원이 아니신가요?  <a href="/register" style="">가입하러가기</a></p>
+			
+			
 		</div>
+		<div class="d-flex justify-content-center mt-2">
+		<img src="../../img/plant_img/welcome.jpg" style="width:60%;">
+		</div>
+		
 	</div>
+	
 </div>
 
 <!--카카오로그인-->
