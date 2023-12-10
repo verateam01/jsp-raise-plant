@@ -32,7 +32,10 @@ public class Plantinfo extends HttpServlet {
         String userId = request.getParameter("userId");
         String plantId = request.getParameter("plantId");
         String findId = "select * from users where id=?";
-        String findPlantInfoSql = "select * from user_plants where user_id=? and plant_id=?;";
+        String findPlantInfoSql = "SELECT up.*, p.plant_name FROM user_plants up " +
+                "JOIN plants p ON up.user_plant_id = p.user_plant_id " +
+                "WHERE up.user_id = ? AND up.plant_id = ?;";
+
         
         try (Connection conn = DBConn.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(findId)) {
@@ -57,6 +60,7 @@ public class Plantinfo extends HttpServlet {
                     	System.out.println("마지막으로 물 준시간: " + rs.getTimestamp("last_watered"));
                     	System.out.println("마지막으로 비료 준 시간: " + rs.getTimestamp("last_fertilized"));
                     	System.out.println("현재날짜: " + rs.getInt("plant_Day"));
+                    	System.out.println("식물이름: " + rs.getString("plant_name"));
                     	
                     	
                     	Timestamp lastWateredTimestamp = rs.getTimestamp("last_watered");
@@ -73,7 +77,7 @@ public class Plantinfo extends HttpServlet {
                         json.put("lastWatered", (lastWateredTimestamp != null) ? lastWateredTimestamp.toString() : JSONObject.NULL);
                         json.put("lastFertilized", (lastFertilizedTimestamp != null) ? lastFertilizedTimestamp.toString() : JSONObject.NULL);
                         json.put("plantDay", rs.getInt("plant_Day"));
-
+                        json.put("plantName", rs.getString("plant_name"));
                         response.setContentType("application/json");
                         response.setCharacterEncoding("UTF-8");
                         response.getWriter().write(json.toString());

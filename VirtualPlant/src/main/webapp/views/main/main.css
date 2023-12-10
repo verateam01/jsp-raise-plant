@@ -129,6 +129,10 @@ img {
     /* 버튼과 input 사이의 간격 */
 }
 
+.carousel-indicators{
+	display:none;
+}
+
 .action_button {
     margin: 0 auto;
     flex: 1;
@@ -189,6 +193,13 @@ img {
 	align-items: center;
 	justify-content: center;
 	font-size: 2rem;
+}
+
+.plant-div{
+	position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
 }
 
 .carousel-control-prev-icon,
