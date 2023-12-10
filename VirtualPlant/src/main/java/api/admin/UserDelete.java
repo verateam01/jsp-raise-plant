@@ -17,11 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import db.util.DBConn;
 
 @WebServlet("/api/admin/user/delete")
-public class Delete extends HttpServlet {
+public class UserDelete extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     
-    public Delete() {
+    public UserDelete() {
         super();
     }
 

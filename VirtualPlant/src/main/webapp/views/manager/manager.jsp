@@ -351,28 +351,31 @@ $(document).ready(() => {
 	        }
 	    );
 	    $('#save-user-btn').data('userid', modalUserId);
+	    $('#save-plant-btn').data('userid', modalUserId);
 	});
 
 	
 	// 식물정보 저장
-	$('#save-plant-btn').click(function() {      
+	$(document).on('click','#save-plant-btn',function(){
+		let userId = $(this).data('userid');
         let gardenia = $('#modifyModal .modal-body input[name="gardenia"]').val();
         let hyacinth = $('#modifyModal .modal-body input[name="hyacinth"]').val();
         let cactus = $('#modifyModal .modal-body input[name="cactus"]').val();
         
-        sendAjaxRequest('/api/admin/user/edit', 'POST', {
+        sendAjaxRequest('/api/admin/plant/edit', 'POST', {
             userId: userId, 
             gardenia: gardenia,
             hyacinth: hyacinth,
             cactus: cactus
         }, (response) => {
-            console.log(response)
+            response = JSON.parse(response);
             if(response.status == "success")
 	            window.location.reload();
         }, (error) => {
             console.error("에러: ", error);
         });
-    });
+		
+	})
 
 
 	

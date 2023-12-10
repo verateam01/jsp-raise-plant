@@ -193,7 +193,9 @@ content: "";
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li><a class="dropdown-item" href="#">계정 설정</a></li>
+                <%if("admin".equals(userType)) {%>
                 <li><a class="manager-menu dropdown-item" href="#">관리자 메뉴</a></li>
+                <%} %>
                 <li><a class="dropdown-item logout-button" href="#">로그아웃</a></li>
             </ul>
         </div>
@@ -326,7 +328,6 @@ $(document).ready(function() {
     		sendAjaxRequest('/api/admin/user','POST',{userType:userType},(response)=>{
     			console.log(response);
     			if('<%=userType%>' == 'admin'){    				
-    			
 		                window.location.href='/manager';
 		                console.log(<%=userType%>);
 		                }

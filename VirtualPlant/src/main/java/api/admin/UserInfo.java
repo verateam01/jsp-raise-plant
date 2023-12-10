@@ -21,7 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 @WebServlet("/api/admin/user")
-public class user extends HttpServlet {
+public class UserInfo extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userType = request.getParameter("userType");
         if (userType.equals("admin")) {
