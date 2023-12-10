@@ -39,8 +39,11 @@
 				<button id="registerButton" class="btn btn-primary"
 					style="width: 90px; background-color: #f97178; border:none;">회원가입</button>
 			</div>
-			<div class="d-flex justify-content-center">
+			<div class="d-flex justify-content-center mt-2">
 				<p>회원이신가요? <a href="/login" style="text-decoration:none; color:#f97178;">로그인하러가기</a></p>
+			</div>
+			<div class="d-flex justify-content-center mt-2">
+				<img src="../../img/plant_img/welcome.jpg" style="width:60%;">
 			</div>
 		</div>
 	</div>
