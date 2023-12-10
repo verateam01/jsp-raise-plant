@@ -20,10 +20,10 @@ import db.util.DBConn;
 
 
 @WebServlet("/api/plant/info")
-public class plantinfo extends HttpServlet {
+public class Plantinfo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public plantinfo() {
+    public Plantinfo() {
         super();
     }
 

@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import db.util.DBConn;
 
 @WebServlet("/api/register")
-public class register extends HttpServlet {
+public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    public register() {
+    public Register() {
         super();
     
     }

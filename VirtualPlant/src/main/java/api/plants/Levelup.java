@@ -18,11 +18,11 @@ import db.util.DBConn;
 
 
 @WebServlet("/api/plant/levelup")
-public class levelup extends HttpServlet {
+public class Levelup extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     
-    public levelup() {
+    public Levelup() {
         super();
     }
 

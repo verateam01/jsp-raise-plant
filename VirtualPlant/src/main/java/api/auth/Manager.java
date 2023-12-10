@@ -19,11 +19,11 @@ import db.util.DBConn;
 import model.User;
 
 @WebServlet("/api/magager")
-public class magager extends HttpServlet {
+public class Manager extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     
-    public magager() {
+    public Manager() {
         super();
     }
 

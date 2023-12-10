@@ -17,7 +17,7 @@ import db.util.DBConn;
 import model.User;
 
 @WebServlet("/api/login")
-public class login extends HttpServlet {
+public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -17,10 +17,10 @@ import db.util.DBConn;
 import model.User;
 
 @WebServlet("/api/login/kakao")
-public class kakao extends HttpServlet {
+public class Kakao extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public kakao() {
+    public Kakao() {
         super();
     }
 

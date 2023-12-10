@@ -20,7 +20,7 @@ import org.json.JSONObject;
 import db.util.DBConn;
 
 @WebServlet("/api/plant/water")
-public class water extends HttpServlet {
+public class Water extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import db.util.DBConn;
 
 @WebServlet("/api/duplicate")
-public class duplicate extends HttpServlet {
+public class Duplicate extends HttpServlet {
 	private static final long serialVersionUID = 1L;
   
-    public duplicate() {
+    public Duplicate() {
         super();
     }
 	

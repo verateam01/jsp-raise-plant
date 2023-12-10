@@ -18,10 +18,10 @@ import org.json.JSONObject;
 import db.util.DBConn;
 
 @WebServlet("/api/plant/refresh")
-public class refresh extends HttpServlet {
+public class Refresh extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
-    public refresh() {
+    public Refresh() {
         super();
     }
 
