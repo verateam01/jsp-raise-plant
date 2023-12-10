@@ -57,6 +57,9 @@ content: "";
   left: 20px;
   bottom: -23px;
 }
+.think-answer{
+	font-size: 1.2rem;
+}
     </style>
 </head>
 <body>
@@ -120,7 +123,7 @@ content: "";
 			<div class="modal-dialog modal-dialog-scrollable modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h1 class="modal-title fs-1" id="exampleModalLabel"></h1>
+						<h1 class="modal-title help-flower-title fs-1" id="exampleModalLabel"></h1>
 						<button type="button" class="btn-close" data-bs-dismiss="modal"
 							aria-label="Close"></button>
 					</div>
@@ -269,27 +272,30 @@ $(document).ready(function() {
 		$('.logout-button').click(logout);
 		
     	let	firstPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
-    	/*
-    	* @count: 주기 횟수
-    	* @type: water, fertilized 
-    	*/
-    	const answerSpeech = (count,type) => {
+    	
+    	let timeoutHandle; //시간담을 변수 
+    	const answerSpeech = (count,type,affection) => {
     		let message = "";
-    		if(count > 3 && type=="water")
-    			message = "너무 물이 많아요 ㅠㅠ 다음날주세요! 오늘 횟수:" + count;
-    		else if(count <= 3 && type=="water")
-    			message = "물을 주셔서 감사합니다! 하루3번인거 잊지않으셨죠?";
-    		else if(count > 2 && type=="fertilizer")
-    			message = "영양분 과다 섭취 입니다 ㅠㅠ";
-    		else if(count <=2 && type=="fertilizer")
-    			message = "쑥쑥 크겠습니다! 감사합니다";
+    		if(count > 3 && type=="water" && affection >= 0)
+    			message = "너무 물이 많아요 ㅠㅠ<br> 다음날 주세요!!<br> 오늘 횟수:" + count;
+    		else if(count <= 3 && type=="water" && affection >= 0)
+    			message = "물을 주셔서 감사합니다!<br> 하루3번인거 잊지 않으셨죠?";
+    		else if(count > 2 && type=="fertilizer" && affection >= 0)
+    			message = "영양분 과다 섭취 입니다 ㅠㅠ <br> 오늘 횟수:" + count;
+    		else if(count <=2 && type=="fertilizer" && affection >= 0)
+    			message = "쑥쑥 크겠습니다! 감사합니다 ㅎㅎ";
+    		else if(affection < 0){
+    			message = "ㅠㅠ 시들시들 Refresh버튼으로 초기화해주세요!";
+    		}
+    		clearTimeout(timeoutHandle);
     		
     		$('.think-answer').html(message);
-    		
-    		setTimeout(()=>{
+    		timeoutHandle = setTimeout(()=>{
     			$('.think-answer').html('');
     		},5000)
     	}
+    	
+    	
     	
     	/*애정도에 따른 애정도바, 아이콘, 버튼 함수*/
     	const affectionBarUpdate = (affection) => {
@@ -373,16 +379,16 @@ $(document).ready(function() {
 
     	    if (plantId == 1) {
     	        imgSrc = '../../img/plant_img/Gardenia' + currStage + '.jpg';
-    	        $('.modal-title').text('치자나무는 어떻게 키워요?');
+    	        $('.help-flower-title').text('치자나무는 어떻게 키워요?');
     	        jspFile = '/views/modal/GardeniaGuide.html';
     	        
     	    } else if (plantId == 2) {
     	        imgSrc = '../../img/plant_img/Hyacinth' + currStage + '.jpg';
-    	        $('.modal-title').text('히아신스는 어떻게 키워요?');
+    	        $('.help-flower-title').text('히아신스는 어떻게 키워요?');
     	        jspFile = '/views/modal/HyacinthGuide.html'; 
     	    } else if (plantId == 3) {
     	        imgSrc = '../../img/plant_img/Cactus' + currStage + '.jpg';
-    	        $('.modal-title').text('선인장은 어떻게 키워요?');
+    	        $('.help-flower-title').text('선인장은 어떻게 키워요?');
     	        jspFile = '/views/modal/CactusGuide.html';
     	    }
 
@@ -515,7 +521,7 @@ $(document).ready(function() {
     		sendAjaxRequest('/api/plant/water','POST',{userId:userId, plantId:currentPlantId,lastWaterd:formattedDateTime},(response)=>{
     			console.log('waterPlant',response);
     			affectionBarUpdate(response.affection);
-				answerSpeech(response.waterCount,"water");  
+				answerSpeech(response.waterCount,"water",response.affection);  
 				displayLevelUp(response.affection,response.currStage);
 				if (response.affection < 0){
     				witherPlant(currentPlantId);
@@ -533,7 +539,7 @@ $(document).ready(function() {
             sendAjaxRequest('/api/plant/fertilizer','POST',{userId:userId, plantId:currentPlantId,lastFertilizedTime:formattedDateTime},(response)=>{
     			console.log(response);
     			affectionBarUpdate(response.affection);
-    			answerSpeech(response.fertilizerCount,"fertilizer");
+    			answerSpeech(response.fertilizerCount,"fertilizer",response.affection);
     			displayLevelUp(response.affection,response.currStage);
     			if (response.affection < 0){
     				witherPlant(currentPlantId);
