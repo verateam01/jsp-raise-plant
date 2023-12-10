@@ -441,6 +441,7 @@
         <url-pattern>*.jsp</url-pattern>
         <url-pattern>*.jspx</url-pattern>
     </servlet-mapping>
+<<<<<<< Updated upstream
     
     	<servlet>
 		<servlet-name>main-jsp</servlet-name>
@@ -492,6 +493,8 @@
 		<servlet-name>manager-jsp</servlet-name>
 		<url-pattern>/manager</url-pattern>
 	</servlet-mapping>
+=======
+>>>>>>> Stashed changes
 
     <!-- The mapping for the SSI servlet -->
 <!--
@@ -500,6 +503,56 @@
         <url-pattern>*.shtml</url-pattern>
     </servlet-mapping>
 -->
+
+<servlet>
+        <servlet-name>main-jsp</servlet-name>
+        <jsp-file>/views/main/main.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>main-jsp</servlet-name>
+        <url-pattern>/main</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>login-jsp</servlet-name>
+        <jsp-file>/views/login/login.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>login-jsp</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>register-jsp</servlet-name>
+        <jsp-file>/views/register/register.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>register-jsp</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>manager-jsp</servlet-name>
+        <jsp-file>/views/manager/manager.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>manager-jsp</servlet-name>
+        <url-pattern>/manager</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>test-jsp</servlet-name>
+        <jsp-file>/views/test/test.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>test-jsp</servlet-name>
+        <url-pattern>/test</url-pattern>
+    </servlet-mapping>
 
     <!-- The mapping for the CGI Gateway servlet -->
 
