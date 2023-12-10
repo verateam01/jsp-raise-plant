@@ -393,7 +393,7 @@ $(document).ready(() => {
 	    sendAjaxRequest('/api/admin/user/delete', 'POST', {
 	        userId: userId,            
 	    }, (response) => {
-	        console.log(response);
+	        response = JSON.parse(response);
 	        if(response.status == "success")
 	            window.location.reload();
 	    }, (error) => {

@@ -32,25 +32,25 @@ public class Delete extends HttpServlet {
 		String userId = request.getParameter("userId");
 
         try (Connection conn = DBConn.getConnection()) {
-            // 트랜잭션 시작
             conn.setAutoCommit(false);
 
             // user_plants 테이블에서 해당 user_id를 가진 레코드의 plant_id 찾기
-            String findPlantIds = "SELECT plant_id FROM user_plants WHERE user_id = ?";
+            String findPlantIds = "SELECT user_plant_id FROM user_plants WHERE user_id = ?";
+
             List<String> plantIds = new ArrayList<>();
             try (PreparedStatement pstmt = conn.prepareStatement(findPlantIds)) {
                 pstmt.setString(1, userId);
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
-                    plantIds.add(rs.getString("plant_id"));
+                    plantIds.add(rs.getString("user_plant_id"));
                 }
             }
 
             // plants 테이블에서 찾은 plant_id를 가진 레코드 삭제
-            for (String plantId : plantIds) {
-                String deletePlant = "DELETE FROM plants WHERE plant_id = ?";
+            for (String user_plant_id : plantIds) {
+                String deletePlant = "DELETE FROM plants WHERE user_plant_id = ?";
                 try (PreparedStatement pstmt = conn.prepareStatement(deletePlant)) {
-                    pstmt.setString(1, plantId);
+                    pstmt.setString(1, user_plant_id);
                     pstmt.executeUpdate();
                 }
             }
@@ -69,7 +69,7 @@ public class Delete extends HttpServlet {
                 pstmt.executeUpdate();
             }
 
-            // 트랜잭션 커밋
+            
             conn.commit();
             response.getWriter().write("{\"status\":\"success\"}");
         } catch (SQLException e) {
