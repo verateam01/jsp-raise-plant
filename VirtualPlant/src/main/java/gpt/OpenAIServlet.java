@@ -33,7 +33,7 @@ public class OpenAIServlet extends HttpServlet {
 		
 		String prompt =	request.getParameter("prompt");
         String apiKey = Config.getProperty("gpt.key"); // OpenAI API 키
-        String data = "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" + prompt + "\"}], \"max_tokens\": 150}";
+        String data = "{\"model\": \"gpt-3.5-turbo-1106\", \"messages\": [{\"role\": \"user\", \"content\": \"" + prompt + "\"}], \"max_tokens\": 150}";
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest httpRequest = HttpRequest.newBuilder()
             .uri(URI.create("https://api.openai.com/v1/chat/completions"))

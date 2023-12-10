@@ -27,7 +27,9 @@
 	font-size: 16px;
 	text-align: left;
 	width: 300px;
-	height: 150px;
+	min-height: 150px; /* 최소 높이 설정 */
+    max-height: 500px; /* 최대 높이 설정 */
+    overflow-y: auto; /* 내용이 넘칠 때 스크롤바 표시 */ 
 	top: 50px;
     right: 40px;
     z-index: 1;
