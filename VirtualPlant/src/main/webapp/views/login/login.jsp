@@ -38,6 +38,7 @@
 			<p>회원이 아니신가요?  <a href="/register" style="">가입하러가기</a></p>
 		</div>
 	</div>
+	<img src="../../img/plant_img/welcone.png">
 </div>
 
 <!--카카오로그인-->
