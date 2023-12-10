@@ -176,7 +176,7 @@ content: "";
             <div class="buttons_container">
                 <button id="water-button" class="water-button action_button">물주기</button>
                 <button id="fertilized-button" class="fertilized-button action_button">비료주기</button>
-                <button class="refresh-button btn btn-outline-primary action_button">Refresh</button>
+				<button type="button" class="refresh-button btn btn-outline-primary action_button" data-bs-toggle="modal" data-bs-target="#reset-modal">Refresh</button>
                 <button id="next-stage" class="next-stage btn btn-outline-danger action_button">LevelUp!</button>
             </div>
             <div class="input_container">
@@ -200,6 +200,26 @@ content: "";
             </ul>
         </div>
     </div> 
+    
+	    <!-- Modal -->
+	<div class="modal fade" id="reset-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h1 class="modal-title fs-5" id="exampleModalLabel">식물 초기화</h1>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        정말 식물을 초기화 하시겠습니까?
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	        <button type="button" class="reset-btn btn btn-primary"  data-bs-dismiss="modal">초기화</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+    
 <script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 <script>
 const sendAjaxRequest = (url, type, data, successCallback,errorCallback) => {
@@ -451,8 +471,7 @@ $(document).ready(function() {
     	})
     	
     	/*리프레시 버튼 로직*/
-    	$('.refresh-button').click(()=>{
-    		
+    	$('.reset-btn').click(()=>{
     		let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
     		
     		sendAjaxRequest('/api/plant/refresh','POST',{userId:userId,plantId:currentPlantId},(response)=>{

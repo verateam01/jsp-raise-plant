@@ -141,10 +141,7 @@ const sendAjaxRequest = (url, type, data, successCallback, errorCallback) => {
     });
 };
 
-
-
-$(document).ready(() => {	
-	
+$(document).ready(() => {		
 	// 회원관리 탭 버튼 클릭 이벤트
     $("#user_tab_button").click(function() {
         // 회원관리 섹션을 표시하고, 식물관리 섹션을 숨김
