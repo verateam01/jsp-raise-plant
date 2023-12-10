@@ -124,9 +124,8 @@ content: "";
 						<button type="button" class="btn-close" data-bs-dismiss="modal"
 							aria-label="Close"></button>
 					</div>
-					<div class="modal-body">
+					<div class="modal-body help-flower">
 						도움말
-
 					</div>
 					<p>
 				</div>
@@ -207,7 +206,7 @@ content: "";
     </div> 
     
 	    <!-- Modal -->
-	<div class="modal fade" id="reset-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="reset-modal" tabindex="-1" aria-labelledby="refreshModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-dialog-centered">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -393,7 +392,7 @@ $(document).ready(function() {
     	    // JSP 파일 불러오기
     	    if (jspFile) {
     	        $.get(jspFile, function(data) {
-    	            $('.modal-body').html(data);
+    	            $('.help-flower').html(data);
     	        });
     	    }
     	};

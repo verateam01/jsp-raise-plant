@@ -26,12 +26,13 @@ public class Register extends HttpServlet {
 		String nick = request.getParameter("nick");
 		String id = request.getParameter("id");
 		String pw = request.getParameter("pw");
+		String email = request.getParameter("email");
 		
 		System.out.println(name);
 		System.out.println(nick);
 		System.out.println(id);
 		System.out.println(pw);
-		String sql = "insert into users(id,pw,user_name,user_nick,user_type) values(?,?,?,?,?)";
+		String sql = "insert into users(id,pw,user_name,user_nick,user_type,email) values(?,?,?,?,?,?)";
 		String user_plants_sql = "insert into user_plants(user_id,plant_id) values(?,?)";
         String plants_sql = "insert into plants(user_plant_id, plant_name) values (?, ?);";
 		
@@ -44,7 +45,9 @@ public class Register extends HttpServlet {
 			 pstmt.setString(2, pw);
 			 pstmt.setString(3, name);
 			 pstmt.setString(4, nick);
+			 
 			 pstmt.setString(5, "local");
+			 pstmt.setString(6, email);
 			 System.out.println("db데이터 넣기완료");
 			 int affectedRows = pstmt.executeUpdate();
 			 if (affectedRows > 0) {
