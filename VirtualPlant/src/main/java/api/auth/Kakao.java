@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import db.util.DBConn;
-import model.User;
+
 
 @WebServlet("/api/login/kakao")
 public class Kakao extends HttpServlet {

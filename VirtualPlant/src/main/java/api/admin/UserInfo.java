@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 @WebServlet("/api/admin/user")
 public class UserInfo extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userType = request.getParameter("userType");
         if (userType.equals("admin")) {
