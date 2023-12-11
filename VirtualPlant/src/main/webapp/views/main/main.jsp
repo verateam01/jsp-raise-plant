@@ -312,6 +312,7 @@ $(document).ready(function() {
 		        document.getElementById("empty_heart").style.display = 'none';
 		        document.getElementById("skull").style.display = 'none';
 		        document.getElementById("full_heart").style.display = 'block';
+		        $('#gauge-fill').css('background-color', '#f97178');
 		    }
 		    else if (affection < 0) {
 		        document.getElementById("full_heart").style.display = 'none';               
@@ -323,12 +324,14 @@ $(document).ready(function() {
 		        fertilizedButton.style.display = 'none';
 		        nextStageButton.style.display = 'none';
 		        nextdayButton.style.display = 'none';
+		        $('#gauge-fill').css('background-color', '#463331');
 		    }
 		    else {
 		        affection = affection;
 		        document.getElementById("full_heart").style.display = 'none';
 		        document.getElementById("skull").style.display = 'none';
 		        document.getElementById("empty_heart").style.display = 'block';
+		        $('#gauge-fill').css('background-color', '#f97178');
 		
 		        // 애정도가 음수가 아닐 때 버튼들을 보이게 합니다.
 		        waterButton.style.display = 'block';
@@ -336,7 +339,7 @@ $(document).ready(function() {
 		        nextStageButton.style.display = 'block';
 		        nextdayButton.style.display = 'block';
 		    }
-		    $('#gauge-fill').css('width', affection + '%');
+		    $('#gauge-fill').css('width', affection + '%')
 		}
     	
 		/*호감도,단계에따른 버튼보여주는 로직*/    	
