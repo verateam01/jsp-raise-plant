@@ -240,10 +240,10 @@ const sendAjaxRequest = (url, type, data, successCallback,errorCallback) => {
 		error:errorCallback
 	})
 }
-
+let userId = null;
 
 $(document).ready(function() {
-    	let userId = "<%= id %>";
+    	userId = "<%= id %>";
     	let userType = "<%=userType%>";
     	console.log('userType',userType)
    		const kakaoLogout = () => {
@@ -592,25 +592,49 @@ $(document).ready(function() {
     	});
     	
 	 });
-    </script>
-    <script>
-    const sendGptRequest = () => {
+
+const sendGptRequest = () => {
+    let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
+
+    sendAjaxRequest('/api/plant/info', 'GET', { userId: userId, plantId: currentPlantId }, (response) => {
+        console.log(response);
+        let plant_name = response.plantName;
+        let plant_affection = response.affection;
+        let plant_feel;
         let chatInput = $('#chat').val();
-        let prompt = "간단하고 순수한 어휘 사용, 궁금한 것에 대한 무한한 호기심, 그리고 어린아이와 같은 단순하고 직관적인 사고 방식, 귀엽고 긍정적인 어휘를 사용해서 대답해줘. 너의 이름은 [식물이]이야. 이제 이 다음에 질문한것에대한 대답을해줘 " + chatInput;
+        if (plant_affection >= 50) {
+        	plant_feel = "기분 좋은 상태야.";
+        }
+        else if (plant_affection >= 0) {
+        	plant_feel = "기분이 그저 그런 상태야.";
+        }
+        else {
+        	plant_feel = "시들어서 잎이 다 말랐어.";
+        }
         
+        let prompt = "너는 식물이야. 그리고 너의 이름은 " + plant_name + "야. 질문을 하는 사람인 나의 이름은 " + " <%= name %> " +  "이야. 먼저 나에게 인사를 하고, 그 다음 자신을 소개하고 , 그 다음에 이 질문에 대답해줘: " + chatInput + ". 너의 대답은 간단하고 순수한 어휘를 사용해야 해. 어린아이처럼 궁금한 것에 대한 호기심을 가지고, 단순하고 직관적인 사고 방식으로 답해줘." + plant_feel;
+
+
         $('.think-answer').html('');
-		$('#loading').show();
-        sendAjaxRequest('/api/gpt','GET',{prompt:prompt},(response)=>{
-        	console.log(response);
+        $('#loading').show();
+        sendAjaxRequest('/api/gpt', 'GET', { prompt: prompt }, (response) => {
+            console.log(response);
             $('.think-answer').html(response.answer);
             $('#loading').hide();
-        },(error)=>console.log(error))
-    }
-    </script>
-    <script>
+        }, (error) => {
+            console.log(error);
+            $('#loading').hide();
+        });
+
+    }, (error) => {
+        console.log(error);
+        // 여기에 오류 처리 로직을 추가할 수 있습니다.
+    });
+}
+
     	
-    </script>
-    
+        
+    </script>    
     <!-- jQuery and Bootstrap Bundle -->
     
     <script src="${pageContext.request.contextPath}/resources/js/bootstrap.bundle.min.js"></script>
