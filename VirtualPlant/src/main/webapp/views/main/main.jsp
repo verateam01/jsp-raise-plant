@@ -16,53 +16,6 @@
     <!-- Font-awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
-    <style>
-#speech-bubble {
-    position: relative;
-	padding: 10px 10px 10px 10px;
-	background: #FFFFFF;
-	border-radius: 5px;
-	border: 4px solid #00bfb6;
-	position: absolute;
-	font-size: 16px;
-	text-align: left;
-	width: 300px;
-	min-height: 150px; /* 최소 높이 설정 */
-    max-height: 500px; /* 최대 높이 설정 */
-    overflow-y: auto; /* 내용이 넘칠 때 스크롤바 표시 */ 
-	top: 50px;
-    right: 40px;
-    z-index: 1;
-}
-
-#speech-bubble:after {
-    content: "";
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  border-left: 10px solid #fff;
-  border-right: 10px solid transparent;
-  border-top: 10px solid #fff;
-  border-bottom: 10px solid transparent;
-  left: 24px;
-  bottom: -13px; 
-}
-#speech-bubble:before{
-content: "";
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  border-left: 10px solid #00bfb6;
-  border-right: 10px solid transparent;
-  border-top: 10px solid #00bfb6;
-  border-bottom: 10px solid transparent;
-  left: 20px;
-  bottom: -23px;
-}
-.think-answer{
-	font-size: 1.2rem;
-}
-    </style>
 </head>
 <body>
 <%
@@ -240,10 +193,10 @@ const sendAjaxRequest = (url, type, data, successCallback,errorCallback) => {
 		error:errorCallback
 	})
 }
-
+let userId = null;
 
 $(document).ready(function() {
-    	let userId = "<%= id %>";
+    	userId = "<%= id %>";
     	let userType = "<%=userType%>";
     	console.log('userType',userType)
    		const kakaoLogout = () => {
@@ -312,6 +265,7 @@ $(document).ready(function() {
 		        document.getElementById("empty_heart").style.display = 'none';
 		        document.getElementById("skull").style.display = 'none';
 		        document.getElementById("full_heart").style.display = 'block';
+		        $('#gauge-fill').css('background-color', '#f97178');
 		    }
 		    else if (affection < 0) {
 		        document.getElementById("full_heart").style.display = 'none';               
@@ -323,12 +277,14 @@ $(document).ready(function() {
 		        fertilizedButton.style.display = 'none';
 		        nextStageButton.style.display = 'none';
 		        nextdayButton.style.display = 'none';
+		        $('#gauge-fill').css('background-color', '#463331');
 		    }
 		    else {
 		        affection = affection;
 		        document.getElementById("full_heart").style.display = 'none';
 		        document.getElementById("skull").style.display = 'none';
 		        document.getElementById("empty_heart").style.display = 'block';
+		        $('#gauge-fill').css('background-color', '#f97178');
 		
 		        // 애정도가 음수가 아닐 때 버튼들을 보이게 합니다.
 		        waterButton.style.display = 'block';
@@ -336,7 +292,7 @@ $(document).ready(function() {
 		        nextStageButton.style.display = 'block';
 		        nextdayButton.style.display = 'block';
 		    }
-		    $('#gauge-fill').css('width', affection + '%');
+		    $('#gauge-fill').css('width', affection + '%')
 		}
     	
 		/*호감도,단계에따른 버튼보여주는 로직*/    	
@@ -372,10 +328,7 @@ $(document).ready(function() {
     		},(err)=>{console.log(err)})
     	})
     	
-    	/*사진변경코드*/
-    	/*
-    	*@todo 캐러셀변경시 사진없음 이미지 삭제, currStage4단계까지 확장 , 사진잘림문제해결필요
-    	*/
+    	/*사진변경코드*/    	
     	const changeImg = (plantId, currStage) => {
     	    let imgSrc, jspFile;
 
@@ -592,25 +545,49 @@ $(document).ready(function() {
     	});
     	
 	 });
-    </script>
-    <script>
-    const sendGptRequest = () => {
+
+const sendGptRequest = () => {
+    let currentPlantId = $('#carouselExampleIndicators .carousel-item.active img').data('plant-id');
+
+    sendAjaxRequest('/api/plant/info', 'GET', { userId: userId, plantId: currentPlantId }, (response) => {
+        console.log(response);
+        let plant_name = response.plantName;
+        let plant_affection = response.affection;
+        let plant_feel;
         let chatInput = $('#chat').val();
-        let prompt = "간단하고 순수한 어휘 사용, 궁금한 것에 대한 무한한 호기심, 그리고 어린아이와 같은 단순하고 직관적인 사고 방식, 귀엽고 긍정적인 어휘를 사용해서 대답해줘. 너의 이름은 [식물이]이야. 이제 이 다음에 질문한것에대한 대답을해줘 " + chatInput;
+        if (plant_affection >= 50) {
+        	plant_feel = "기분 좋은 상태야.";
+        }
+        else if (plant_affection >= 0) {
+        	plant_feel = "기분이 그저 그런 상태야.";
+        }
+        else {
+        	plant_feel = "시들어서 잎이 다 말랐어.";
+        }
         
+        let prompt = "너는 식물이야. 그리고 너의 이름은 " + plant_name + "야. 질문을 하는 사람인 나의 이름은 " + " <%= name %> " +  "이야. 먼저 나에게 인사를 하고, 그 다음 자신을 소개하고 , 그 다음에 이 질문에 대답해줘: " + chatInput + ". 너의 대답은 간단하고 순수한 어휘를 사용해야 해. 어린아이처럼 궁금한 것에 대한 호기심을 가지고, 단순하고 직관적인 사고 방식으로 답해줘." + plant_feel;
+
+
         $('.think-answer').html('');
-		$('#loading').show();
-        sendAjaxRequest('/api/gpt','GET',{prompt:prompt},(response)=>{
-        	console.log(response);
+        $('#loading').show();
+        sendAjaxRequest('/api/gpt', 'GET', { prompt: prompt }, (response) => {
+            console.log(response);
             $('.think-answer').html(response.answer);
             $('#loading').hide();
-        },(error)=>console.log(error))
-    }
-    </script>
-    <script>
+        }, (error) => {
+            console.log(error);
+            $('#loading').hide();
+        });
+
+    }, (error) => {
+        console.log(error);
+        // 여기에 오류 처리 로직을 추가할 수 있습니다.
+    });
+}
+
     	
-    </script>
-    
+        
+    </script>    
     <!-- jQuery and Bootstrap Bundle -->
     
     <script src="${pageContext.request.contextPath}/resources/js/bootstrap.bundle.min.js"></script>

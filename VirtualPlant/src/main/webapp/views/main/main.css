@@ -242,3 +242,29 @@ img {
 	top: 42px;
     left: 157px;
 }
+
+#speech-bubble {
+    position: relative;
+	padding: 10px 10px 10px 10px;
+	background: #FFFFFF;
+	border-radius: 5px;
+	border: 4px solid rgb(117, 49, 49);
+	position: absolute;
+	font-size: 16px;
+	text-align: left;
+	width: 300px;
+	min-height: 150px; /* 최소 높이 설정 */
+    max-height: 500px; /* 최대 높이 설정 */
+    overflow-y: auto; /* 내용이 넘칠 때 스크롤바 표시 */ 
+	top: 50px;
+    right: 40px;
+    z-index: 1;
+}
+#speech-bubble::-webkit-scrollbar-thumb {
+	background-color: rgb(117, 49, 49);
+	
+}
+
+.think-answer{
+	font-size: 1.2rem;
+}
