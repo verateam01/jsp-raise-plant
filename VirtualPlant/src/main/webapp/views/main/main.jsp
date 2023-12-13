@@ -16,53 +16,6 @@
     <!-- Font-awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
-    <style>
-#speech-bubble {
-    position: relative;
-	padding: 10px 10px 10px 10px;
-	background: #FFFFFF;
-	border-radius: 5px;
-	border: 4px solid #00bfb6;
-	position: absolute;
-	font-size: 16px;
-	text-align: left;
-	width: 300px;
-	min-height: 150px; /* 최소 높이 설정 */
-    max-height: 500px; /* 최대 높이 설정 */
-    overflow-y: auto; /* 내용이 넘칠 때 스크롤바 표시 */ 
-	top: 50px;
-    right: 40px;
-    z-index: 1;
-}
-
-#speech-bubble:after {
-    content: "";
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  border-left: 10px solid #fff;
-  border-right: 10px solid transparent;
-  border-top: 10px solid #fff;
-  border-bottom: 10px solid transparent;
-  left: 24px;
-  bottom: -13px; 
-}
-#speech-bubble:before{
-content: "";
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  border-left: 10px solid #00bfb6;
-  border-right: 10px solid transparent;
-  border-top: 10px solid #00bfb6;
-  border-bottom: 10px solid transparent;
-  left: 20px;
-  bottom: -23px;
-}
-.think-answer{
-	font-size: 1.2rem;
-}
-    </style>
 </head>
 <body>
 <%
@@ -375,10 +328,7 @@ $(document).ready(function() {
     		},(err)=>{console.log(err)})
     	})
     	
-    	/*사진변경코드*/
-    	/*
-    	*@todo 캐러셀변경시 사진없음 이미지 삭제, currStage4단계까지 확장 , 사진잘림문제해결필요
-    	*/
+    	/*사진변경코드*/    	
     	const changeImg = (plantId, currStage) => {
     	    let imgSrc, jspFile;
 
