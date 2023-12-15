@@ -202,9 +202,9 @@ $(document).ready(() => {
 		            }
 
 		            response.forEach((user) => {
-		                let gardenia = user.plants.length > 0 ? user.plants[2] : "";
+		                let gardenia = user.plants.length > 0 ? user.plants[0] : "";
 		                let hyacinth = user.plants.length > 1 ? user.plants[1] : "";
-		                let cactus = user.plants.length > 2 ? user.plants[0] : "";
+		                let cactus = user.plants.length > 2 ? user.plants[2] : "";
 
 		               
 		                var row = '<tr>' + 
@@ -327,9 +327,9 @@ $(document).ready(() => {
 	            let userData = response.find(user => {
     			return String(user.user_id) === String(modalUserId);
 			});
-	            let gardenia = userData.plants.length > 0 ? userData.plants[2] : "";
+	            let gardenia = userData.plants.length > 0 ? userData.plants[0] : "";
                 let hyacinth = userData.plants.length > 1 ? userData.plants[1] : "";
-                let cactus = userData.plants.length > 2 ? userData.plants[0] : "";
+                let cactus = userData.plants.length > 2 ? userData.plants[2] : "";
 
 	            if (userData) {
 	            	$('#modifyModal .modal-body input[name="user_id"]').val(userData.user_id);

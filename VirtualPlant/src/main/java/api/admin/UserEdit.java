@@ -24,7 +24,7 @@ public class UserEdit extends HttpServlet {
     }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userId = request.getParameter("userId");
+		
         String id = request.getParameter("id");
         String userName = request.getParameter("userName");
         String userNick = request.getParameter("userNick");

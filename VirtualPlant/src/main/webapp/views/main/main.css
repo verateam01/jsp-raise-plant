@@ -177,7 +177,7 @@ img {
 #plant_area {
     display: flex;
     flex-direction: row;
-    flex: 10;
+    flex: 9;
     width: 100%;
     height: 100%;
 }
